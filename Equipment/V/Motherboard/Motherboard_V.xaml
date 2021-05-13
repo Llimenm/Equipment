@@ -1,0 +1,237 @@
+﻿<Page x:Class="Equipment.VM.Motherboard_V"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Equipment.VM"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+      mc:Ignorable="d" 
+      Name="mwindow"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Motherboard_V">
+    <Page.DataContext>
+        <local:Add_MB_K_VM/>
+    </Page.DataContext>
+    <StackPanel Background="White">
+        <Menu>
+            <MenuItem Header="Управление...">
+                <MenuItem Header="Добавить мат плату"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Материнские платы" HorizontalAlignment="Stretch" TextAlignment="Center" Background="Black" Foreground="White" Margin="5"/>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock FontWeight="Bold" Text="Фильтрация:" Margin="0,0,20,0" VerticalAlignment="Center"/>
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Производитель:"/>
+                    <ComboBox ItemsSource="{Binding FilterList_ManufacturerMb, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedFilterManufacturer}" Width="130">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Модель:"></TextBlock>
+                    <TextBox Text="{Binding SelectedFilterModel, UpdateSourceTrigger=PropertyChanged}" Width="130" Margin="0,0,10,0">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding AcceptFilter}"/>
+                        </TextBox.InputBindings>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding AcceptFilter}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Сокет:"/>
+                    <TextBox Text="{Binding SelectedFilterSocket, UpdateSourceTrigger=PropertyChanged}" Width="130" Margin="0,0,10,0">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding AcceptFilter}" Key="Return"/>
+                        </TextBox.InputBindings>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding AcceptFilter}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <Button Command="{Binding DeclineFilter}" Width="60" VerticalAlignment="Stretch">
+                    Сброс
+                </Button>
+            </StackPanel>
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding MbTable, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock MinWidth="150" Width="auto" Text="Производитель"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="{Binding Manufacturer}" Margin="0 0 10 0"  />
+                                <TextBlock MinWidth="150" Width="auto" Text="Новый производитель"/>
+                                <ComboBox MinWidth="150" IsEditable="True" 
+                                          ItemsSource="{Binding Path=ManufacturerList}" 
+                                          Text="{Binding Path=NewManufacturer.Manufacturer, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="Manufacturer" 
+                                          DataContext="{Binding DataContext, ElementName=mwindow}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Модель"/>
+                                <TextBox MinWidth="100" Width="auto" Text="{Binding Model, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Текущий сокет"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="{Binding Socket.Name}" Margin="0 0 10 0"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="Новый сокет"/>
+                                <ComboBox MinWidth="150" IsEditable="True" 
+                                          ItemsSource="{Binding Path=SocketList}" 
+                                          Text="{Binding Path=NewSocket.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                          SelectedItem="{Binding Path=NewSocket}" 
+                                          DisplayMemberPath="Name" 
+                                          DataContext="{Binding DataContext, ElementName=mwindow}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Текущий чипсет"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="{Binding Chipset.Name}" Margin="0 0 10 0"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="Новый чипсет"/>
+                                <ComboBox MinWidth="150" IsEditable="True" 
+                                          ItemsSource="{Binding Path=ChipsetTable}" 
+                                          Text="{Binding Path=NewChipset_M.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                          SelectedItem="{Binding Path=NewChipset_M,UpdateSourceTrigger=PropertyChanged}" 
+                                          DisplayMemberPath="Name" 
+                                          DataContext="{Binding DataContext, ElementName=mwindow}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Текущий тип памяти"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="{Binding Ram_Type.Name}" Margin="0 0 10 0"/>
+                                <TextBlock MinWidth="150" Width="auto" Text="Новый тип памяти"/>
+                                <ComboBox MinWidth="150" IsEditable="True" 
+                                          ItemsSource="{Binding Path=RamTypeList}" 
+                                          Text="{Binding Path=NewRamType.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                          SelectedItem="{Binding Path=NewRamType, UpdateSourceTrigger=PropertyChanged}" 
+                                          DisplayMemberPath="Name" 
+                                          DataContext="{Binding DataContext, ElementName=mwindow}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Количество слотов RAM"/>
+                                <TextBox MinWidth="100" Width="auto" Text="{Binding Ram_count, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Кол-во сокетов"/>
+                                <TextBox MinWidth="100" Width="auto" Text="{Binding Socket_count, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock MinWidth="150" Width="auto" Text="Общее количество"/>
+                                <TextBox MinWidth="150" Width="auto" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <Button Content="Сохранить" Command="{Binding SaveMB}" CommandParameter="{Binding ElementName=mwindow, Mode=OneWay}" DataContext="{Binding DataContext, ElementName=mwindow}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="ID">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Id}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Производитель">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Manufacturer}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Модель">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Model, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Сокет">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Socket.Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Кол-во сокетов">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Socket_count}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Чипсет">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Chipset.Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Тип памяти">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ram_Type.Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Количество слотов памяти">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ram_count}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Количество М.2">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding M2_count}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="ID_портов">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ports_id}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Общее кол-во">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Count}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="В комплектах">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OnKomplekt}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="201*"/>
+                    <ColumnDefinition Width="149*"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="350*"/>
+                </Grid.ColumnDefinitions>
+                <Button Command="{Binding PreviousPageMb}" Grid.Column="1" HorizontalAlignment="Left" Width="50" Background="Black" Foreground="White" Height="30" FontSize="20" Content="←" Margin="99,0,0,0"/>
+                <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding CurrentPageMb}" FontWeight="Bold" FontSize="14" Margin="5"/>
+                    <TextBlock Text="/" FontWeight="Bold" FontSize="14" Margin="5"/>
+                    <TextBlock Text="{Binding AllPageMb}" FontWeight="Bold" FontSize="14" TextAlignment="Center" Margin="5">
+                    </TextBlock>
+                </StackPanel>
+                <Button Command="{Binding NextPageMb}" Grid.Column="3" HorizontalAlignment="Left" Width="50" Background="Black" Foreground="White" Height="30" FontSize="20" Content="→"/>
+            </Grid>
+        </StackPanel>
+    </StackPanel>
+</Page>

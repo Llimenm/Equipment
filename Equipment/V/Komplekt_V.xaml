@@ -1,0 +1,294 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Equipment.V"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+      xmlns:VM="clr-namespace:Equipment.VM" x:Name="page" x:Class="Equipment.V.Komplekt_V"
+      mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="1000"
+      MinHeight="684"
+      MinWidth="1066"
+    Height="auto"
+    Width="auto"
+      Title="Komplekt_V">
+    <Page.DataContext>
+        <VM:Komplekt_VM/>
+    </Page.DataContext>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.ColumnSpan="4" Foreground="White" Background="Gray">
+            
+        </Menu>
+        <DataGrid 
+            IsReadOnly="False" 
+            Height="auto" 
+            AutoGenerateColumns="False" 
+            ItemsSource="{Binding KomplektTable, UpdateSourceTrigger=PropertyChanged}" 
+            SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"  
+            Background="#FFEFF8FF"
+             Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2"  Margin="2">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Width="auto" MinWidth="100" Text="Имя Уч. Записи:"/>
+                                <TextBox Width="auto" MinWidth="100" Text="{Binding Account.Acc_user, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Width="auto" MinWidth="100" Text="Статус:" />
+                                <TextBlock Width="auto" MinWidth="100" Text="{Binding Status.Name}" Background="Black" Foreground="White"/>
+                                <TextBlock Text="Новый статус:" Width="auto" MinWidth="80" Margin="10,0,0,0"/>
+                                <ComboBox ItemsSource="{Binding Path=Statuses,UpdateSourceTrigger=PropertyChanged}"  
+                                            SelectedItem="{Binding Path=NewStatus, UpdateSourceTrigger=PropertyChanged}" 
+                                            MinWidth="200" 
+                                            Width="auto" 
+                                            DataContext="{Binding DataContext, ElementName=page, Mode=OneWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Width="auto" MinWidth="100" Text="Инв. номер:"/>
+                                <TextBox Width="auto" MinWidth="100" Text="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Width="auto" MinWidth="100" Text="Отдел:" />
+                                <TextBlock Width="auto" MinWidth="25" Text="{Binding Otdelenie.Nuber}" Background="Gray"/>
+                                <TextBlock Width="auto" MinWidth="100" Text="{Binding Otdelenie.Name}" Background="Gray"/>
+                                <TextBlock Text="Новый отдел:" Width="auto" MinWidth="80" Margin="10,0,0,0"/>
+                                <ComboBox ItemsSource="{Binding Path=Otdelenies,UpdateSourceTrigger=PropertyChanged}"  
+                                            SelectedItem="{Binding Path=NewOtdelenie, UpdateSourceTrigger=PropertyChanged}" 
+                                            MinWidth="200" 
+                                            Width="auto" 
+                                            DataContext="{Binding DataContext, ElementName=page, Mode=OneWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock MinWidth="30" Width="auto" Text="{Binding Nuber}" />
+                                                <TextBlock Width="auto" Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Комментарий:" MinWidth="100"/>
+                                <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" Width="400" MaxHeight="150" VerticalScrollBarVisibility="Auto" />
+                            </StackPanel>
+                            <Button Height="25" Content="Сохранить" Margin="0,5,0,0" 
+                                    Command="{Binding Path=SaveSelectedItem}" DataContext="{Binding DataContext, ElementName=page}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Id" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Имя учетной записи" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Account.Acc_user, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Статус" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Status.Name, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Инвентарный номер" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Номер отделения" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Otdelenie.Nuber}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Наименование отделения" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Otdelenie.Name}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Комментарий" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="5" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding PreviousPage}" Grid.Column="0" HorizontalAlignment="Right" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="←"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding CurrentPage}" FontWeight="Bold" FontSize="14" Margin="5"/>
+                <TextBlock Text="/" FontWeight="Bold" FontSize="14" Margin="5"/>
+                <TextBlock Text="{Binding AllPage}" FontWeight="Bold" FontSize="14" TextAlignment="Center" Margin="5">
+                </TextBlock>
+            </StackPanel>
+            <Button Command="{Binding NextPage}" Grid.Column="2" HorizontalAlignment="Left" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="→"/>
+        </Grid>
+        <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Margin="0,5,0,0">
+            <Expander Grid.Column="2" Grid.Row="2">
+                <Expander.Header>
+                    <TextBlock TextAlignment="Center" Text="Фильтрация" Background="#FF7BACD6" MinWidth="300" Width="auto"/>
+                </Expander.Header>
+                <StackPanel Grid.Row="2" Orientation="Vertical" Grid.ColumnSpan="2">
+                    <TextBlock Text="Имя:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                    <TextBox Text="{Binding FilterName, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding Filtered}" />
+                        </TextBox.InputBindings>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding Filtered}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Text="Тип:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                    <ComboBox MinWidth="70" VerticalAlignment="Center">
+
+                    </ComboBox>
+                    <TextBlock Text="Статус: " VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                    <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedFilterStatus, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Text="Инв. номер:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                    <TextBox Text="{Binding SelectedFilterInventory, UpdateSourceTrigger=PropertyChanged}" MinWidth="80" VerticalAlignment="Center">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding Filtered}"/>
+                        </TextBox.InputBindings>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding Filtered}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock VerticalAlignment="Center" FontSize="12" Margin="5">
+                        Отделение:
+                    </TextBlock>
+                    <ComboBox VerticalAlignment="Center" MinWidth="60" ItemsSource="{Binding Otdelenies}" SelectedItem="{Binding SelectedFilterOtdelenie, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Width="auto" Text="{Binding Nuber, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button VerticalAlignment="Center" Margin="0,10,0,0" Command="{Binding FilterCancel}">
+                        Сброс
+                    </Button>
+                </StackPanel>
+            </Expander>
+            <Expander>
+                <Expander.Header>
+                    <TextBlock Background="#FF7BACD6" Text="Изменение комплектации" MinWidth="300" TextAlignment="Center"/>
+                </Expander.Header>
+                <Border BorderThickness="0.5" BorderBrush="Black" >
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="auto" VerticalAlignment="Center" MinWidth="150" FontSize="12" Text="Комплект мат.плат:"/>
+                            <Button Command="{Binding ChangeMb_k}" Content="Изменить" MinWidth="200" Width="auto"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Expander>
+            <Expander>
+                <Expander.Header>
+                    <TextBlock Text="Новый комплект" Background="#FF7BACD6" TextAlignment="Center" HorizontalAlignment="Center" Width="auto" MinWidth="300"/>
+                </Expander.Header>
+                <Border BorderBrush="Black" BorderThickness="0.5" Margin="0,0,0,6">
+                    <StackPanel>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Имя учетной записи:"/>
+                            <TextBox Text="{Binding NewItem.Account.Acc_user, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Пароль уч. записи:"/>
+                            <TextBox Text="{Binding NewItem.Account.Password, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Инвентарный номер:"/>
+                            <TextBox Text="{Binding NewItem.Inventory, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0" >
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Статус:"/>
+                            <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding NewItem.Status}" MinWidth="200" Width="auto" HorizontalAlignment="Right">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0" >
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Отделение:"/>
+                            <ComboBox ItemsSource="{Binding Otdelenies}" SelectedItem="{Binding NewItem.Otdelenie}" MinWidth="200" Width="auto" HorizontalAlignment="Right">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                        <Grid Margin="0,5,0,0" HorizontalAlignment="Stretch" >
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Комментарий:"/>
+                            <TextBox Text="{Binding NewItem.Comment, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Button Command="{Binding AddItem}" Grid.Row="13" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Добавить комплект" Width="170" Height="30" Cursor="Hand" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </StackPanel>
+
+    </Grid>
+</Page>
