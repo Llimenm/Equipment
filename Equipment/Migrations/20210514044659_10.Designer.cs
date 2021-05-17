@@ -2,14 +2,16 @@
 using Equipment.M.EquipmentContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Equipment.Migrations
 {
     [DbContext(typeof(EqContext))]
-    partial class EqContextModelSnapshot : ModelSnapshot
+    [Migration("20210514044659_10")]
+    partial class _10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,8 +112,6 @@ namespace Equipment.Migrations
 
                     b.HasIndex("Komplekt_Id");
 
-                    b.HasIndex("MB_id");
-
                     b.ToTable("Motherboards_K");
                 });
 
@@ -160,29 +160,6 @@ namespace Equipment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Motherboards");
-                });
-
-            modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Monitor_M", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Model")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Ports_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Monitor");
                 });
 
             modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Ports_M", b =>
@@ -311,15 +288,7 @@ namespace Equipment.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Equipment.M.EquipmentContext.Models.MB_M", "Motherboard")
-                        .WithMany()
-                        .HasForeignKey("MB_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Komplekt");
-
-                    b.Navigation("Motherboard");
                 });
 #pragma warning restore 612, 618
         }

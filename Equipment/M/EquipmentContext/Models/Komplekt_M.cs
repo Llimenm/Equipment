@@ -14,6 +14,19 @@ namespace Equipment.M.EquipmentContext.Models
         /// <summary>
         /// Id статуса
         /// </summary>
+        int type_eq_id;
+        /// <summary>
+        /// Тип оборудования
+        /// </summary>
+        public int Type_eq_id
+        {
+            get => type_eq_id;
+            set
+            {
+                type_eq_id = value;
+                OnPropertyChanged();
+            }
+        }
         public int Status_id
         {
             get => status_id;
@@ -80,6 +93,8 @@ namespace Equipment.M.EquipmentContext.Models
         public Account_M Account { get; set; }
         [NotMapped]
         public Otdelenie_M Otdelenie { get; set; }
+        [ForeignKey("Type_eq_id")]
+        public Type_eq_M Type_Eq { get; set; }
 
     }
 }

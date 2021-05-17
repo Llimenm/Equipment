@@ -2,14 +2,16 @@
 using Equipment.M.EquipmentContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Equipment.Migrations
 {
     [DbContext(typeof(EqContext))]
-    partial class EqContextModelSnapshot : ModelSnapshot
+    [Migration("20210516093933_11")]
+    partial class _11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

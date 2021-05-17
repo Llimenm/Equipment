@@ -452,7 +452,7 @@ namespace Equipment.VM
                 var tmp = ec.Motherboards_K.Where(x => x.Komplekt_Id == Komplekt_id).Skip((CurrentPageMb_k - 1) * 25).Take(25).ToList();
                 foreach (var item in tmp)
                 {
-                    item.MB = ec.Motherboards.FirstOrDefault(x => x.Id == item.MB_id);
+                    item.Motherboard = ec.Motherboards.FirstOrDefault(x => x.Id == item.MB_id);
                 }
                 Mb_K_table = new ObservableCollection<MB_K_M>(tmp);
             }

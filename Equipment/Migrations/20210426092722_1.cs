@@ -46,6 +46,7 @@ namespace Equipment.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Status_id = table.Column<int>(type: "int", nullable: false),
                     Inventory = table.Column<string>(type: "longtext", nullable: true),
+                    Type_eq_id = table.Column<int>(type: "int",nullable: true),
                     Acc_id = table.Column<int>(type: "int", nullable: false),
                     MB_K_Num = table.Column<int>(type: "int", nullable: false)
                 },

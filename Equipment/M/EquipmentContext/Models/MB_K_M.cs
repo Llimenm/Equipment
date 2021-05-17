@@ -62,8 +62,8 @@ namespace Equipment.M.EquipmentContext.Models
                 OnPropertyChanged();
             }
         }
-        [NotMapped]
-        public MB_M MB { get; set; }
+        [ForeignKey("MB_id")]
+        public MB_M Motherboard { get; set; }
 
         [ForeignKey("Komplekt_Id")]
         public Komplekt_M Komplekt { get; set; }

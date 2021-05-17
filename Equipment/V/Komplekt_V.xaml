@@ -28,13 +28,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.5*"/>
             <ColumnDefinition Width="1.5*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="340"/>
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="4" Foreground="White" Background="Gray">
             
         </Menu>
         <DataGrid 
-            IsReadOnly="False" 
+            IsReadOnly="True" 
             Height="auto" 
             AutoGenerateColumns="False" 
             ItemsSource="{Binding KomplektTable, UpdateSourceTrigger=PropertyChanged}" 
@@ -55,9 +55,25 @@
                                 <TextBox Width="auto" MinWidth="100" Text="{Binding Account.Acc_user, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Width="auto" MinWidth="100" Text="Тип:"/>
+                                <TextBlock Width="auto" MinWidth="200" Text="{Binding Type_Eq.Type_name}"/>
+                                <TextBlock Width="auto" MinWidth="100" Text="Новый тип:" Margin="10,0,0,0"/>
+                                <ComboBox ItemsSource="{Binding Path=TypeList,UpdateSourceTrigger=PropertyChanged}"  
+                                            SelectedItem="{Binding Path=NewType, UpdateSourceTrigger=PropertyChanged}" 
+                                            MinWidth="200" 
+                                            Width="auto" 
+                                            DataContext="{Binding DataContext, ElementName=page, Mode=OneWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Type_name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Width="auto" MinWidth="100" Text="Статус:" />
-                                <TextBlock Width="auto" MinWidth="100" Text="{Binding Status.Name}" Background="Black" Foreground="White"/>
-                                <TextBlock Text="Новый статус:" Width="auto" MinWidth="80" Margin="10,0,0,0"/>
+                                <TextBlock Width="auto" MinWidth="200" Text="{Binding Status.Name}" Background="Black" Foreground="White"/>
+                                <TextBlock Text="Новый статус:" Width="auto" MinWidth="100" Margin="10,0,0,0"/>
                                 <ComboBox ItemsSource="{Binding Path=Statuses,UpdateSourceTrigger=PropertyChanged}"  
                                             SelectedItem="{Binding Path=NewStatus, UpdateSourceTrigger=PropertyChanged}" 
                                             MinWidth="200" 
@@ -72,12 +88,12 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Width="auto" MinWidth="100" Text="Инв. номер:"/>
-                                <TextBox Width="auto" MinWidth="100" Text="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Width="auto" MinWidth="200" Text="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Width="auto" MinWidth="100" Text="Отдел:" />
                                 <TextBlock Width="auto" MinWidth="25" Text="{Binding Otdelenie.Nuber}" Background="Gray"/>
-                                <TextBlock Width="auto" MinWidth="100" Text="{Binding Otdelenie.Name}" Background="Gray"/>
+                                <TextBlock Width="175" Text="{Binding Otdelenie.Name}" Background="Gray"/>
                                 <TextBlock Text="Новый отдел:" Width="auto" MinWidth="80" Margin="10,0,0,0"/>
                                 <ComboBox ItemsSource="{Binding Path=Otdelenies,UpdateSourceTrigger=PropertyChanged}"  
                                             SelectedItem="{Binding Path=NewOtdelenie, UpdateSourceTrigger=PropertyChanged}" 
@@ -116,6 +132,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Account.Acc_user, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Тип" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Type_Eq.Type_name, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -177,53 +200,77 @@
                     <TextBlock TextAlignment="Center" Text="Фильтрация" Background="#FF7BACD6" MinWidth="300" Width="auto"/>
                 </Expander.Header>
                 <StackPanel Grid.Row="2" Orientation="Vertical" Grid.ColumnSpan="2">
-                    <TextBlock Text="Имя:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
-                    <TextBox Text="{Binding FilterName, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Return" Command="{Binding Filtered}" />
-                        </TextBox.InputBindings>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Filtered}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <TextBlock Text="Тип:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
-                    <ComboBox MinWidth="70" VerticalAlignment="Center">
-
-                    </ComboBox>
-                    <TextBlock Text="Статус: " VerticalAlignment="Center" FontSize="12" Margin="5"/>
-                    <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedFilterStatus, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock Text="Инв. номер:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
-                    <TextBox Text="{Binding SelectedFilterInventory, UpdateSourceTrigger=PropertyChanged}" MinWidth="80" VerticalAlignment="Center">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Return" Command="{Binding Filtered}"/>
-                        </TextBox.InputBindings>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Filtered}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <TextBlock VerticalAlignment="Center" FontSize="12" Margin="5">
+                    <Border BorderBrush="Black" BorderThickness="0.5" Margin="5">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Имя:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                            <TextBox Text="{Binding FilterName, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" VerticalAlignment="Center">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Return" Command="{Binding Filtered}" />
+                                </TextBox.InputBindings>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding Filtered}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0.5" Margin="5">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Тип:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                            <ComboBox ItemsSource="{Binding TypeList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedFilterType, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" VerticalAlignment="Center">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Type_name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0.5" Margin="5">
+                        <StackPanel>
+                            <TextBlock Text="Статус: " VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                            <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedFilterStatus, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" VerticalAlignment="Center">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0.5" Margin="5">
+                        <StackPanel>
+                            <TextBlock Text="Инв. номер:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
+                            <TextBox Text="{Binding SelectedFilterInventory, UpdateSourceTrigger=PropertyChanged}" MinWidth="80" VerticalAlignment="Center">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Return" Command="{Binding Filtered}"/>
+                                </TextBox.InputBindings>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding Filtered}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0.5" Margin="5">
+                        <StackPanel>
+                            <TextBlock VerticalAlignment="Center" FontSize="12" Margin="5">
                         Отделение:
-                    </TextBlock>
-                    <ComboBox VerticalAlignment="Center" MinWidth="60" ItemsSource="{Binding Otdelenies}" SelectedItem="{Binding SelectedFilterOtdelenie, UpdateSourceTrigger=PropertyChanged}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Width="auto" Text="{Binding Nuber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            </TextBlock>
+                            <ComboBox IsEditable="True" VerticalAlignment="Center" MinWidth="60" ItemsSource="{Binding Otdelenies}" SelectedItem="{Binding SelectedFilterOtdelenie, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Width="auto" Text="{Binding Nuber, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
                     <Button VerticalAlignment="Center" Margin="0,10,0,0" Command="{Binding FilterCancel}">
                         Сброс
                     </Button>
@@ -248,6 +295,16 @@
                 </Expander.Header>
                 <Border BorderBrush="Black" BorderThickness="0.5" Margin="0,0,0,6">
                     <StackPanel>
+                        <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Тип:"/>
+                            <ComboBox ItemsSource="{Binding TypeList}" SelectedItem="{Binding NewItem.Type_Eq}" MinWidth="200" Width="auto" HorizontalAlignment="Right">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Type_name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
                         <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Имя учетной записи:"/>
                             <TextBox Text="{Binding NewItem.Account.Acc_user, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
@@ -275,7 +332,10 @@
                             <ComboBox ItemsSource="{Binding Otdelenies}" SelectedItem="{Binding NewItem.Otdelenie}" MinWidth="200" Width="auto" HorizontalAlignment="Right">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Nuber}" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

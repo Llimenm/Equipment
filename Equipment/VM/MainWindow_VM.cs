@@ -131,5 +131,18 @@ namespace Equipment.VM
                 OnPropertyChanged();
             }
         }
+
+        private bool monitorIsSelected;
+        public bool MonitorIsSelected
+        {
+            get => monitorIsSelected;
+            set
+            {
+                monitorIsSelected = value;
+                FrameForPage = new Monitor_V();
+                (FrameForPage.DataContext as Monitor_VM).GetData();
+                OnPropertyChanged();
+            }
+        }
     }
 }

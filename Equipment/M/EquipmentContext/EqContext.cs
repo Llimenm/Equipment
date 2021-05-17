@@ -18,11 +18,12 @@ namespace Equipment.M.EquipmentContext
         public DbSet<Socket_M> Socket { get; set; }
         public DbSet<Status_M> Status { get; set; }
         public DbSet<Type_eq_M> Type_equipment{ get; set; }
+        public DbSet<Monitor_M> Monitor { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("server = localhost; database = Eq_test; uid = root; pwd = root",
+            optionsBuilder.UseMySql($"server = {ConectionSetting.GetServer()}; database = {ConectionSetting.GetDb(DbType.app)}; uid = root; pwd = root",
                 new MySqlServerVersion(new Version(5, 5, 5)));
             optionsBuilder.EnableSensitiveDataLogging(true);
         }
