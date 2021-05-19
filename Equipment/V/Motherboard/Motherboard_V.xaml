@@ -10,7 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Motherboard_V">
     <Page.DataContext>
-        <local:Add_MB_K_VM/>
+        <local:Motherboard_Komplekt_VM/>
     </Page.DataContext>
     <StackPanel Background="White">
         <Menu>
@@ -66,7 +66,7 @@
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Производитель"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="{Binding Manufacturer}" Margin="0 0 10 0"  />
                                 <TextBlock MinWidth="150" Width="auto" Text="Новый производитель"/>
@@ -76,11 +76,11 @@
                                           DisplayMemberPath="Manufacturer" 
                                           DataContext="{Binding DataContext, ElementName=mwindow}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Модель"/>
                                 <TextBox MinWidth="100" Width="auto" Text="{Binding Model, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Текущий сокет"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="{Binding Socket.Name}" Margin="0 0 10 0"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="Новый сокет"/>
@@ -91,7 +91,7 @@
                                           DisplayMemberPath="Name" 
                                           DataContext="{Binding DataContext, ElementName=mwindow}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Текущий чипсет"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="{Binding Chipset.Name}" Margin="0 0 10 0"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="Новый чипсет"/>
@@ -102,7 +102,7 @@
                                           DisplayMemberPath="Name" 
                                           DataContext="{Binding DataContext, ElementName=mwindow}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Текущий тип памяти"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="{Binding Ram_Type.Name}" Margin="0 0 10 0"/>
                                 <TextBlock MinWidth="150" Width="auto" Text="Новый тип памяти"/>
@@ -113,19 +113,19 @@
                                           DisplayMemberPath="Name" 
                                           DataContext="{Binding DataContext, ElementName=mwindow}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Количество слотов RAM"/>
                                 <TextBox MinWidth="100" Width="auto" Text="{Binding Ram_count, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Кол-во сокетов"/>
                                 <TextBox MinWidth="100" Width="auto" Text="{Binding Socket_count, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock MinWidth="150" Width="auto" Text="Общее количество"/>
                                 <TextBox MinWidth="150" Width="auto" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             </StackPanel>
-                            <Button Content="Сохранить" Command="{Binding SaveMB}" CommandParameter="{Binding ElementName=mwindow, Mode=OneWay}" DataContext="{Binding DataContext, ElementName=mwindow}"/>
+                            <Button Content="Сохранить" Command="{Binding SaveMB}" CommandParameter="{Binding ElementName=mwindow, Mode=OneWay}" DataContext="{Binding DataContext, ElementName=mwindow}" Margin="5"/>
                         </StackPanel>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>

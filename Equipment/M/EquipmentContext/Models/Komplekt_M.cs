@@ -96,5 +96,7 @@ namespace Equipment.M.EquipmentContext.Models
         [ForeignKey("Type_eq_id")]
         public Type_eq_M Type_Eq { get; set; }
 
+
+
     }
 }

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Add_MB_K_V" MinHeight="720" Height="720" MinWidth="1300" Width="1300">
     <Window.DataContext>
-        <VM:Add_MB_K_VM/>
+        <VM:Motherboard_Komplekt_VM/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

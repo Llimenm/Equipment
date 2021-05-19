@@ -62,7 +62,7 @@ namespace Equipment.VM
 
                 mbSelected = value;
                 FrameForPage = new Motherboard_V();
-                (FrameForPage.DataContext as Add_MB_K_VM).SetStartData(19);
+                (FrameForPage.DataContext as Motherboard_Komplekt_VM).SetStartData(19);
                 OnPropertyChanged();
             }
         }

@@ -19,7 +19,7 @@ namespace Equipment.M.EquipmentContext
         public DbSet<Status_M> Status { get; set; }
         public DbSet<Type_eq_M> Type_equipment{ get; set; }
         public DbSet<Monitor_M> Monitor { get; set; }
-
+        public DbSet<Monitor_Komplekt_M> Monitor_komplekt { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

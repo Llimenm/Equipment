@@ -16,9 +16,9 @@ using OKB3Admin;
 
 namespace Equipment.VM
 {
-    public class Add_MB_K_VM : Base_VM
+    public class Motherboard_Komplekt_VM : Base_VM
     {
-        public Add_MB_K_VM() 
+        public Motherboard_Komplekt_VM() 
         {
            
         }

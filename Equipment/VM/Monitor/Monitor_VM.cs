@@ -40,23 +40,13 @@ namespace Equipment.VM
             }
         }
 
-        Monitor_M selectedMonitor;
-        public Monitor_M SelectedMonitor
-        {
-            get => selectedMonitor;
-            set
-            {
-                selectedMonitor = value;
-                OnPropertyChanged();
-            }
-        }
-
         #endregion
 
         #region Get запросы
 
         public async Task GetData()
         {
+            NewMonitor = new Monitor_M();
             CurrentPage = 1;
             await Task.Run(() => GetManufacturerList());
             await Task.Run(() => GetMonitorTable());
@@ -72,17 +62,21 @@ namespace Equipment.VM
             await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Выгрузка данных по мониторам, так же учитывает фильтрацию
+        /// </summary>
+        /// <returns></returns>
         public async Task GetMonitorTable()
         {
             using (EqContext ec = new EqContext())
             {
-                var tmp = ec.Monitor.Where(x =>
-                (string.IsNullOrEmpty(FilterModel) ? x.Model.Contains("") : x.Model.Contains(FilterModel)) &
-                FilterManufacturer == null ? x.Manufacturer.Contains("") : x.Manufacturer.Contains(FilterManufacturer.Manufacturer)).
+                Allpage = Convert.ToInt32(Math.Ceiling(ec.Monitor.Where(x => string.IsNullOrEmpty(FilterModel) ? x.Model.Contains("") : x.Model.Contains(FilterModel)).
+                Where(x => FilterManufacturer == null ? x.Manufacturer.Contains("") : x.Manufacturer.Contains(FilterManufacturer.Manufacturer)).Count() / 25d));
+                var tmp = ec.Monitor.Where(x => string.IsNullOrEmpty(FilterModel) ? x.Model.Contains("") : x.Model.Contains(FilterModel)).
+                Where(x => FilterManufacturer == null ? x.Manufacturer.Contains("") : x.Manufacturer.Contains(FilterManufacturer.Manufacturer)).
                 Skip((CurrentPage - 1) * 25).
                 Take(25);
-                MonitorTable = new ObservableCollection<Monitor_M>(await tmp.ToListAsync());
-                Allpage = Convert.ToInt32(Math.Round(tmp.Count() / 25d, MidpointRounding.ToPositiveInfinity));
+                MonitorTable = new ObservableCollection<Monitor_M>(tmp.ToList());
             }
             await Task.CompletedTask;
         }
@@ -126,10 +120,29 @@ namespace Equipment.VM
             }
 
         }
-
+        /// <summary>
+        /// Применение фильтра, вызывает GetMonitorTable
+        /// </summary>
         private void AcceptFilterMethod()
         {
             GetMonitorTable();
+        }
+
+        /// <summary>
+        /// Сброс фильтра, вызывает GetMonitorTable
+        /// </summary>
+        RelayCommand cancelFilter;
+        public RelayCommand CancelFilter
+        {
+            get
+            {
+                return cancelFilter ??= new RelayCommand(o =>
+                {
+                    FilterManufacturer = null;
+                    FilterModel = null;
+                    Task.Run(() => GetMonitorTable());
+                });
+            }
         }
         #endregion
 
@@ -179,6 +192,102 @@ namespace Equipment.VM
                     CurrentPage -= 1;
                     Task.Run(() => GetMonitorTable());
                 }, o => CurrentPage > 1 );
+            }
+        }
+
+        #endregion
+
+        #region Управление данными
+        Monitor_M selectedMonitor;
+        public Monitor_M SelectedMonitor
+        {
+            get => selectedMonitor;
+            set
+            {
+                selectedMonitor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        Monitor_M newMonitor;
+        public Monitor_M NewMonitor
+        {
+            get => newMonitor;
+            set
+            {
+                newMonitor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        Monitor_M newManufacturer;
+        public Monitor_M NewManufacturer
+        {
+            get => newManufacturer;
+            set
+            {
+                newManufacturer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        RelayCommand addMonitor;
+        public RelayCommand AddMonitor
+        {
+            get
+            {
+                return addMonitor ??= new RelayCommand(o =>
+                {
+                    using (EqContext ec = new EqContext())
+                    {
+                        ec.Monitor.Update(NewMonitor);
+                        ec.SaveChanges();
+                        NewMonitor = new Monitor_M();
+                        CurrentPage = Allpage;
+                        GetMonitorTable();
+                    }
+                });
+            }
+        }
+
+        RelayCommand deleteMonitor;
+        public RelayCommand DeleteMonitor
+        {
+            get
+            {
+                return deleteMonitor ??= new RelayCommand(o =>
+                {
+                    using (EqContext ec = new EqContext())
+                    {
+                        ec.Monitor.Remove(SelectedMonitor);
+                        ec.SaveChanges();
+                        GetMonitorTable();
+                    }
+                }
+                , o => SelectedMonitor != null
+                );
+            }
+        }
+
+        RelayCommand saveMonitor;
+        public RelayCommand SaveMonitor
+        {
+            get
+            {
+                return saveMonitor ??= new RelayCommand(o =>
+                {
+                    using (EqContext ec = new EqContext())
+                    {
+                        if(newManufacturer != null)
+                        {
+                            SelectedMonitor.Manufacturer = NewManufacturer.Manufacturer;
+                        }
+                        ec.Monitor.Update(SelectedMonitor);
+                        ec.SaveChanges();
+                        GetManufacturerList();
+                        NewManufacturer = null;
+                    }
+                });
             }
         }
 

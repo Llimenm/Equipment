@@ -13,6 +13,7 @@ using System.Windows;
 using Equipment.M;
 using OKB3Admin.M;
 using Microsoft.EntityFrameworkCore;
+using Equipment.V.Monitor;
 
 namespace Equipment.VM
 {
@@ -148,8 +149,8 @@ namespace Equipment.VM
                     (changeMB_k = new RelayCommand(o =>
                     {
                         Add_MB_K_V window = new Add_MB_K_V();
-                        (window.DataContext as Add_MB_K_VM).ChangeOrView = true;
-                        (window.DataContext as Add_MB_K_VM).SetStartData(SelectedItem.Id);
+                        (window.DataContext as Motherboard_Komplekt_VM).ChangeOrView = true;
+                        (window.DataContext as Motherboard_Komplekt_VM).SetStartData(SelectedItem.Id);
                         window.ShowDialog();
                         GetMB_K_Table();
                     }, o => SelectedItem != null
@@ -168,9 +169,9 @@ namespace Equipment.VM
                         using (EqContext ec = new EqContext())
                         {
                             Add_MB_K_V window = new Add_MB_K_V();
-                            (window.DataContext as Add_MB_K_VM).ChangeOrView = true;
-                            (window.DataContext as Add_MB_K_VM).Komplekt_id = SelectedItem.Id;
-                            (window.DataContext as Add_MB_K_VM).SetStartData(SelectedItem.Id);
+                            (window.DataContext as Motherboard_Komplekt_VM).ChangeOrView = true;
+                            (window.DataContext as Motherboard_Komplekt_VM).Komplekt_id = SelectedItem.Id;
+                            (window.DataContext as Motherboard_Komplekt_VM).SetStartData(SelectedItem.Id);
                             window.ShowDialog();
                         }
                     }
@@ -409,6 +410,8 @@ namespace Equipment.VM
             {
                 return filterCancel ??= new RelayCommand(o =>
                 {
+                    SelectedFilterOtdelenie = null;
+                    SelectedFilterType = null;
                     FilterName = null;
                     SelectedFilterInventory = null;
                     SelectedFilterStatus = null;
@@ -471,6 +474,21 @@ namespace Equipment.VM
                     CurrentPage += 1;
                     To_do();
                 }, o => CurrentPage < AllPage);
+            }
+        }
+
+        RelayCommand changeMonitorKomplekt;
+        public RelayCommand ChangeMonitorKomplekt
+        {
+            get
+            {
+                return changeMonitorKomplekt ??= new RelayCommand(o =>
+                {
+                    Monitor_Komplekt_V monitorKomplekt = new Monitor_Komplekt_V();
+                    (monitorKomplekt.DataContext as Monitor_Komplekt_VM).GetData();
+                    (monitorKomplekt.DataContext as Monitor_Komplekt_VM).GetMonitorKomplekt(SelectedItem.Id);
+                    monitorKomplekt.ShowDialog();
+                }, o=> SelectedItem != null);
             }
         }
     }

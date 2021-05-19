@@ -12,7 +12,7 @@ namespace Equipment.M
     {
          static ServerType CurServerType
         {
-            get => ServerType.home;
+            get => ServerType.test;
         }
 
         static Dictionary<string, string> con_list = new Dictionary<string, string>()
