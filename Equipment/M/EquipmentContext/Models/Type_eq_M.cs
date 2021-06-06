@@ -5,9 +5,8 @@ using OKB3Admin;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Type_eq_M : Base_M
+    public class Type_eq_M : BaseModelWithGUID
     {
-        public int id { get; set; }
         string type_name;
         /// <summary>
         /// Наименование типа оборудования

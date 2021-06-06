@@ -6,15 +6,41 @@ using Equipment.V;
 using System.Windows.Controls;
 using Equipment.V.Komplekt;
 using Equipment.V.Supplementary_tables;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Equipment.VM
 {
-    public class MainWindow_VM : Base_VM
+    public class MainWindow_VM : BaseModelForVM
     {
+        private Page komplekt_page = new Komplekt_V();
+        private Page motherboard_page = new Motherboard_V();
+        private Page monitor_page = new Monitor_V();
+        private Page status_page = new Status_V();
+        private Page typeEq_page = new Type_equipment_V();
+        private Page socket_page = new Socket_V();
+        private Page chipset_page = new  Chipset_V();
+        private Page ramtype_page = new Ram_type_V();
+        private Page account_page = new Account_V();
+
         public MainWindow_VM()
         {
-
+            GetDataPage();
         }
+
+        public void GetDataPage()
+        {
+            (komplekt_page.DataContext as Komplekt_VM).GetStartData();
+            (monitor_page.DataContext as Monitor_VM).GetData();
+            (status_page.DataContext as Status_VM).GetData();
+            (typeEq_page.DataContext as Type_equipment_VM).GetData();
+            (socket_page.DataContext as Socket_VM).GetData();
+            (chipset_page.DataContext as Chipset_VM).GetData();
+            (ramtype_page.DataContext as Ram_type_VM).GetData();
+            (account_page.DataContext as Account_VM).GetData();
+            (motherboard_page.DataContext as Motherboard_Komplekt_VM).SetStartData();
+        }
+        
 
         Page frameForPage;
         public Page FrameForPage
@@ -33,10 +59,8 @@ namespace Equipment.VM
             get => statusIsSelected;
             set
             {
-
                 statusIsSelected = value;
-                FrameForPage = new Status_V();
-                (FrameForPage.DataContext as Status_VM).GetData();
+                FrameForPage = status_page;
                 OnPropertyChanged();
             }
         }
@@ -48,7 +72,7 @@ namespace Equipment.VM
             set
             {
                 komplectIsSelected = value;
-                FrameForPage = new Komplekt_V();
+                FrameForPage = komplekt_page;
                 OnPropertyChanged();
             }
         }
@@ -59,10 +83,8 @@ namespace Equipment.VM
             get => mbSelected;
             set
             {
-
                 mbSelected = value;
-                FrameForPage = new Motherboard_V();
-                (FrameForPage.DataContext as Motherboard_Komplekt_VM).SetStartData(19);
+                FrameForPage = motherboard_page;
                 OnPropertyChanged();
             }
         }
@@ -74,8 +96,7 @@ namespace Equipment.VM
             set
             {
                 typeEqIsSelected = value;
-                FrameForPage = new Type_equipment_V();
-                (FrameForPage.DataContext as Type_equipment_VM).GetData();
+                FrameForPage = typeEq_page;
                 OnPropertyChanged();
             }
         }
@@ -87,8 +108,7 @@ namespace Equipment.VM
             set
             {
                 socketIsSelected = value;
-                FrameForPage = new Socket_V();
-                (FrameForPage.DataContext as Socket_VM).GetData();
+                FrameForPage = socket_page;
                 OnPropertyChanged();
             }
         }
@@ -100,8 +120,7 @@ namespace Equipment.VM
             set
             {
                 chipsetIsSelected = value;
-                FrameForPage = new Chipset_V();
-                (FrameForPage.DataContext as Chipset_VM).GetData();
+                FrameForPage = chipset_page;
                 OnPropertyChanged();
             }
         }
@@ -113,8 +132,7 @@ namespace Equipment.VM
             set
             {
                 ramTypeIsSelected = value;
-                FrameForPage = new Ram_type_V();
-                (FrameForPage.DataContext as Ram_type_VM).GetData();
+                FrameForPage = ramtype_page;
                 OnPropertyChanged();
             }
         }
@@ -126,8 +144,7 @@ namespace Equipment.VM
             set
             {
                 accountIsSelected = value;
-                FrameForPage = new Account_V();
-                (FrameForPage.DataContext as Account_VM).GetData();
+                FrameForPage = account_page;
                 OnPropertyChanged();
             }
         }
@@ -139,8 +156,7 @@ namespace Equipment.VM
             set
             {
                 monitorIsSelected = value;
-                FrameForPage = new Monitor_V();
-                (FrameForPage.DataContext as Monitor_VM).GetData();
+                FrameForPage = monitor_page;
                 OnPropertyChanged();
             }
         }

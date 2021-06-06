@@ -27,7 +27,9 @@
             </MenuItem>
         </Menu>
         <StackPanel Grid.Row="1">
-            <TextBlock Text="Материнские платы" HorizontalAlignment="Stretch" TextAlignment="Center" Background="Black" Foreground="White" Margin="5"/>
+            <TextBlock Margin="5" HorizontalAlignment="Stretch" Background="#FF7BACD6" Foreground="White" TextAlignment="Center" FontSize="18">
+            <Run Text="Матернские платы"/>
+            </TextBlock>
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock FontWeight="Bold" Text="Фильтрация:" Margin="0,0,20,0" VerticalAlignment="Center"/>
                 <StackPanel Margin="0,0,10,0">
@@ -72,19 +74,12 @@
             </StackPanel>
 
             <StackPanel Height="30" Grid.Row="2" Orientation="Horizontal" Margin="5">
-                <TextBlock FontWeight="Bold" Text="Инв. номер:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox VerticalAlignment="Center" Text="{Binding Inventory}" Width="150" Background="Black" Foreground="White"/>
+                <TextBlock FontWeight="Bold" Text="Сер. номер:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <TextBox VerticalAlignment="Center" Text="{Binding Inventory}" Width="150" Foreground="White"/>
                 <Button IsEnabled="{Binding ChangeOrView}" Grid.Row="2" HorizontalAlignment="Right" MinWidth="200" Content="Добавить" Command="{Binding Add_mb_in_k}" Margin="10,0,0,0"/>
             </StackPanel>
             <DataGrid AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding MbTable, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="ID">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Id}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Производитель">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -181,9 +176,11 @@
             </Grid>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <TextBlock Text="Комплект мат.плат" HorizontalAlignment="Stretch" TextAlignment="Center" Background="Black" Foreground="White"/>
+            <TextBlock Margin="5" HorizontalAlignment="Stretch" Background="#FF7BACD6" Foreground="White" TextAlignment="Center" FontSize="18">
+            <Run Text="Мат платы в комплекте"/>
+            </TextBlock>
             <ScrollViewer>
-                <ListView IsEnabled="{Binding ChangeOrView}" ItemsSource="{Binding Mb_K_table}" SelectedItem="{Binding SelectedMotherboardKomplekt}">
+                <ListView Margin="5" IsEnabled="{Binding ChangeOrView}" ItemsSource="{Binding Mb_K_table}" SelectedItem="{Binding SelectedMotherboardKomplekt}">
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Удалить" Command="{Binding DeleteSelectedMb_in_K}"/>
@@ -191,38 +188,31 @@
                     </ListView.ContextMenu>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="auto" Header="Id">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Id}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
                             <GridViewColumn Width="auto" Header="ID Мат платы">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding MB_id}"/>
+                                        <TextBlock Text="{Binding Motherboard_guid}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="auto" Header="Производитель">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding MB.Manufacturer}"/>
+                                        <TextBlock Text="{Binding Motherboard.Manufacturer}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="auto" Header="Модель">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding MB.Model}"/>
+                                        <TextBlock Text="{Binding Motherboard.Model}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="auto" Header="Инв. номер">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Inventory}"/>
+                                        <TextBlock Text="{Binding SerialNumber}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

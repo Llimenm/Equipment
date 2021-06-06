@@ -5,9 +5,8 @@ using OKB3Admin;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Status_M : Base_M
+    public class Status_M : BaseModelWithGUID
     {
-        public int Id { get; set;}
         string name;
         public string Name
         {

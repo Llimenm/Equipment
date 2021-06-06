@@ -18,6 +18,8 @@
     </Page.DataContext>
     <Grid Background="White">
         <Grid.RowDefinitions>
+            <RowDefinition Height="38"/>
+            <RowDefinition Height="22"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="1.5*"/>
@@ -30,7 +32,13 @@
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="340"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Orientation="Horizontal">
+        <TextBlock Grid.Row="0" Margin="5" Foreground="White" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Center" Text="Комплекты" Background="#FF7BACD6" Grid.ColumnSpan="3" />
+        <Menu Grid.Row="1" Foreground="White" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Stretch" Background="#FF7BACD6" Grid.ColumnSpan="3">
+            <MenuItem Header="Управление">
+                <MenuItem Header="Обновать" Command="{Binding RefreshData}"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Grid.ColumnSpan="3" Grid.Row="2" Orientation="Horizontal">
 
             <StackPanel Orientation="Vertical" Margin="5">
                 <TextBlock Text="Имя:" VerticalAlignment="Center" FontSize="12" Margin="5"/>
@@ -115,7 +123,7 @@
             ItemsSource="{Binding KomplektTable, UpdateSourceTrigger=PropertyChanged}" 
             SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"  
             Background="#FFEFF8FF"
-             Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2">
+             Grid.Row="3" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Изменить комплектацию...">
@@ -151,7 +159,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Width="auto" MinWidth="100" Text="Статус:" />
-                                <TextBlock Width="auto" MinWidth="200" Text="{Binding Status.Name}" Background="Black" Foreground="White"/>
+                                <TextBlock Width="auto" MinWidth="200" Text="{Binding Status.Name}" Foreground="Black" FontWeight="Bold" Background="#FF7BACD6" />
                                 <TextBlock Text="Новый статус:" Width="auto" MinWidth="100" Margin="10,0,0,0"/>
                                 <ComboBox ItemsSource="{Binding Path=Statuses,UpdateSourceTrigger=PropertyChanged}"  
                                             SelectedItem="{Binding Path=NewStatus, UpdateSourceTrigger=PropertyChanged}" 
@@ -171,14 +179,17 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Width="auto" MinWidth="100" Text="Отдел:" />
-                                <TextBlock Width="auto" MinWidth="25" Text="{Binding Otdelenie.Nuber}" Background="Gray"/>
-                                <TextBlock Width="175" Text="{Binding Otdelenie.Name}" Background="Gray"/>
+                                <TextBlock TextWrapping="Wrap"  Width="200" Background="#FF7BACD6">
+                                    <Run  Text="{Binding Otdelenie.Number}" ></Run>
+                                    <Run Text="{Binding Otdelenie.Name}"></Run>
+                                </TextBlock>
                                 <TextBlock Text="Новый отдел:" Width="auto" MinWidth="80" Margin="10,0,0,0"/>
                                 <ComboBox ItemsSource="{Binding Path=Otdelenies,UpdateSourceTrigger=PropertyChanged}"  
                                             SelectedItem="{Binding Path=NewOtdelenie, UpdateSourceTrigger=PropertyChanged}" 
                                             MinWidth="200" 
                                             Width="auto" 
-                                            DataContext="{Binding DataContext, ElementName=page, Mode=OneWay}">
+                                            DataContext="{Binding DataContext, ElementName=page, Mode=OneWay}"
+                                            Margin="20,0,0,0">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -238,7 +249,7 @@
                 <DataGridTemplateColumn Header="Номер отделения" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Otdelenie.Nuber}"/>
+                            <TextBlock Text="{Binding Otdelenie.Number}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -258,7 +269,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Grid.Row="5" Grid.ColumnSpan="2">
+        <Grid Grid.Row="7" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="100"/>
@@ -273,7 +284,7 @@
             </StackPanel>
             <Button Command="{Binding NextPage}" Grid.Column="2" HorizontalAlignment="Left" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="→"/>
         </Grid>
-        <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Margin="0,5,0,0">
+        <StackPanel Grid.Row="3" Grid.Column="2" Grid.RowSpan="4" Margin="0,5,0,0">
             <Expander>
                 <Expander.Header>
                     <TextBlock Text="Новый комплект" Background="#FF7BACD6" TextAlignment="Center" HorizontalAlignment="Center" Width="auto" MinWidth="300"/>
@@ -300,7 +311,7 @@
                     </Grid>
                     <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0">
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Инвентарный номер:"/>
-                        <TextBox Text="{Binding NewItem.Inventory, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
+                        <TextBox Text="{Binding NewItem.InventoryNumber.Inventory, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="auto" HorizontalAlignment="Right"/>
                     </Grid>
                     <Grid HorizontalAlignment="Stretch" Margin="0,5,0,0" >
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" Text="Статус:"/>

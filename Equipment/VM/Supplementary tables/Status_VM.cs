@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
 namespace Equipment.VM
 {
-    public class Status_VM : Base_VM
+    public class Status_VM : BaseModelForVM
     {
         public Status_VM()
         {

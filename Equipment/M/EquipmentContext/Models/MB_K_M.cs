@@ -6,33 +6,31 @@ using OKB3Admin;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class MB_K_M : Base_M
+    public class MB_K_M : BaseModelWithID
     {
-        public int Id { get; set; }
-
-        int komplekt_id;
+        Guid? komplekt_guid;
         /// <summary>
         /// Номер комплекта материнских плат
         /// </summary>
-        public int Komplekt_Id
+        public Guid? Komplekt_guid
         {
-            get => komplekt_id;
+            get => komplekt_guid;
             set
             {
-                komplekt_id = value;
+                komplekt_guid = value;
                 OnPropertyChanged();
             }
         }
-        int mb_id;
+        Guid? motherboard_guid;
         /// <summary>
         /// Id материнской платы
         /// </summary>
-        public int MB_id
+        public Guid? Motherboard_guid
         {
-            get => mb_id;
+            get => motherboard_guid;
             set
             {
-                mb_id = value;
+                motherboard_guid = value;
                 OnPropertyChanged();
             }
         }
@@ -49,23 +47,23 @@ namespace Equipment.M.EquipmentContext.Models
                 OnPropertyChanged();
             }
         }
-        string inventory;
+        string serialNumber;
         /// <summary>
-        /// Инвентарник материнки
+        /// Серийник материнки
         /// </summary>
-        public string Inventory
+        public string SerialNumber
         {
-            get => inventory;
+            get => serialNumber;
             set
             {
-                inventory = value;
+                serialNumber = value;
                 OnPropertyChanged();
             }
         }
-        [ForeignKey("MB_id")]
+        [ForeignKey("Motherboard_guid")]
         public MB_M Motherboard { get; set; }
 
-        [ForeignKey("Komplekt_Id")]
+        [ForeignKey("Komplekt_guid")]
         public Komplekt_M Komplekt { get; set; }
     }
 }

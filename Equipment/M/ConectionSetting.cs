@@ -12,7 +12,7 @@ namespace Equipment.M
     {
          static ServerType CurServerType
         {
-            get => ServerType.test;
+            get => ServerType.home;
         }
 
         static Dictionary<string, string> con_list = new Dictionary<string, string>()
@@ -25,7 +25,7 @@ namespace Equipment.M
         static Dictionary<string, string> db_con_list = new Dictionary<string, string>()
         {
             ["app"] = "Eq_test",
-            ["main"] = "Entity_test"
+            ["main"] = "entityTest1"
         };
 
         public static string ConString(ServerType serverType, DbType appType)

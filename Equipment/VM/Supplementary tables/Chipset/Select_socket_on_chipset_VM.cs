@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Equipment.VM
 {
-    public class Select_socket_on_chipset_VM : Base_VM
+    public class Select_socket_on_chipset_VM : BaseModelForVM
     {
         public Socket_M ChooosedSocket { get; set; }
         public Select_socket_on_chipset_VM()

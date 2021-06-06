@@ -5,9 +5,8 @@ using System.Text;
 using OKB3Admin;
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class MB_M : Base_M
-    {
-        public int Id { get; set; }
+    public class MB_M : BaseModelWithGUID
+    { 
         string manufacturer;
         /// <summary>
         /// Производитель
@@ -37,26 +36,26 @@ namespace Equipment.M.EquipmentContext.Models
         /// <summary>
         /// Тип оборудования
         /// </summary>
-        int type_eq_id;
-        public int Type_eq_id
+        Guid? type_eq_guid;
+        public Guid? Type_eq_guid
         {
-            get => type_eq_id;
+            get => type_eq_guid;
             set
             {
-                type_eq_id = value;
+                type_eq_guid = value;
                 OnPropertyChanged();
             }
         }
-        int socket_id;
+        Guid? socket_guid;
         /// <summary>
         /// id сокета 
         /// </summary>
-        public int Socket_id
+        public Guid? Socket_guid
         { 
-            get => socket_id;
+            get => socket_guid;
             set
             {
-                socket_id = value;
+                socket_guid = value;
                 OnPropertyChanged();
             }
         }
@@ -73,29 +72,29 @@ namespace Equipment.M.EquipmentContext.Models
                 OnPropertyChanged();
             }
         }
-        int chipset_id;
+        Guid? chipset_guid;
         /// <summary>
         /// ID чипсета
         /// </summary>
-        public int Chipset_id
+        public Guid? Chipset_guid
         {
-            get => chipset_id;
+            get => chipset_guid;
             set
             {
-                chipset_id = value;
+                chipset_guid = value;
                 OnPropertyChanged();
             }
         }
         /// <summary>
         /// Id типа памяти
         /// </summary>
-        int ram_type_id;
-        public int Ram_type_id
+        Guid? ram_type_guid;
+        public Guid? Ram_type_guid
         {
-            get => ram_type_id;
+            get => ram_type_guid;
             set
             {
-                ram_type_id = value;
+                ram_type_guid = value;
                 OnPropertyChanged();
             }
         }
@@ -165,13 +164,16 @@ namespace Equipment.M.EquipmentContext.Models
             }
         }
 
-        [NotMapped]
+        [ForeignKey("Type_eq_guid")]
         public Type_eq_M Type_equipment { get; set; }
-        [NotMapped]
+
+        [ForeignKey("Socket_guid")]
         public Socket_M Socket { get; set;}
-        [NotMapped]
+
+        [ForeignKey("Chipset_guid")]
         public Chipset_M Chipset { get; set; }
-        [NotMapped]
+
+        [ForeignKey("Ram_type_guid")]
         public Ram_type_M Ram_Type { get; set; }
     }
 }

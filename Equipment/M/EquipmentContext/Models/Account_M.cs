@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using OKB3Admin;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Account_M : Base_M
+    public class Account_M : BaseModelWithID
     {
-        public int Id { get; set; }
         string acc_user;
         /// <summary>
         /// Имя пользователя комплекта
@@ -48,5 +49,6 @@ namespace Equipment.M.EquipmentContext.Models
                 OnPropertyChanged();
             }
         }
+
     }
 }

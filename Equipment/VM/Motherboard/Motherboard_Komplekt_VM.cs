@@ -16,14 +16,31 @@ using OKB3Admin;
 
 namespace Equipment.VM
 {
-    public class Motherboard_Komplekt_VM : Base_VM
+    public class Motherboard_Komplekt_VM : BaseModelForVM
     {
         public Motherboard_Komplekt_VM() 
         {
            
         }
 
-        public void SetStartData(int komplekt_id)
+        public async Task SetStartData()
+        {
+            await GetFilterList();
+            await Task.Run(() => GetMbTable());
+            currentPageMb = 1;
+
+
+            using (EqContext ec = new EqContext())
+            {
+                var tmp = ec.Motherboards.GroupBy(x => x.Manufacturer).Select(x => new MB_M { Manufacturer = x.Key });
+                ManufacturerList = new ObservableCollection<MB_M>(tmp.ToList());
+                ChipsetTable = new ObservableCollection<Chipset_M>(ec.Chipset.ToList());
+                SocketList = new ObservableCollection<Socket_M>(ec.Socket.ToList());
+                RamTypeList = new ObservableCollection<Ram_type_M>(ec.Ram_type.ToList());
+            }
+        }
+
+        public void SetStartData(Guid? komplekt_id)
         {
             GetFilterList();
             Task.Run(() => GetMbTable());
@@ -46,7 +63,7 @@ namespace Equipment.VM
             currentPageMb = 1;
             currentPageMb_k = 1;
         }
-        public int Komplekt_id { get; set; } //Номер комплекта в который добавлять платы
+        public Guid? Komplekt_id { get; set; } //Номер комплекта в который добавлять платы
         bool changeOrView;
         /// <summary>
         /// Переменная которая сменяет просмотр или изменение комплектов мат плат и самих мат плат
@@ -177,18 +194,18 @@ namespace Equipment.VM
                     {
                         if (NewSocket.Name != null && NewSocket.Name != "")
                         {
-                            if (ec.Socket.FirstOrDefault(x => x.Id == NewSocket.Id) == null)
+                            if (ec.Socket.FirstOrDefault(x => x.GID == NewSocket.GID) == null)
                             {
                                 ec.Socket.Update(NewSocket);
                                 ec.SaveChanges();
                             }
-                            SelectedItem.Socket_id = NewSocket.Id;
+                            SelectedItem.Socket_guid = NewSocket.GID;
                             SelectedItem.Socket = NewSocket;
                         }
 
                         if (NewChipset_M.Name != null && NewChipset_M.Name != "")
                         {
-                            var tmp = ec.Chipset.FirstOrDefault(x => x.Id == NewChipset_M.Id);
+                            var tmp = ec.Chipset.FirstOrDefault(x => x.GID == NewChipset_M.GID);
                             if (tmp == null)
                             {
                                 Select_socket_on_chipset win = new Select_socket_on_chipset();
@@ -196,7 +213,7 @@ namespace Equipment.VM
                                 win.ShowDialog();
                                 if ((win.DataContext as Select_socket_on_chipset_VM).ChooosedSocket != null)
                                 {
-                                    NewChipset_M.Socket_id = (win.DataContext as Select_socket_on_chipset_VM).ChooosedSocket.Id;
+                                    NewChipset_M.Socket_guid = (win.DataContext as Select_socket_on_chipset_VM).ChooosedSocket.GID;
                                     NewChipset_M.Socket = (win.DataContext as Select_socket_on_chipset_VM).ChooosedSocket;
                                 }
                                 else
@@ -207,7 +224,7 @@ namespace Equipment.VM
                                 ec.Chipset.Update(NewChipset_M);
                                 ec.SaveChanges();
                             }
-                            SelectedItem.Chipset_id = NewChipset_M.Id;
+                            SelectedItem.Chipset_guid = NewChipset_M.GID;
                             SelectedItem.Chipset = NewChipset_M;
                         }
                                              
@@ -220,12 +237,12 @@ namespace Equipment.VM
                         
                         if (NewRamType.Name != null && NewRamType.Name != "")
                         {
-                            if (ec.Ram_type.FirstOrDefault(x => x.Id == NewRamType.Id) == null)
+                            if (ec.Ram_type.FirstOrDefault(x => x.GID == NewRamType.GID) == null)
                             {
                                 ec.Ram_type.Update(NewRamType);
                                 ec.SaveChanges();
                             }
-                            SelectedItem.Ram_type_id = NewRamType.Id;
+                            SelectedItem.Ram_type_guid = NewRamType.GID;
                             SelectedItem.Ram_Type = NewRamType;
                         }
 
@@ -258,13 +275,13 @@ namespace Equipment.VM
                 OnPropertyChanged();
             }
         }
-        string inventory;
-        public string Inventory // Назначение инв. номера мат платам идущим в комплекты
+        string serialNumber;
+        public string SerialNumber // Назначение инв. номера мат платам идущим в комплекты
         {
-            get => inventory;
+            get => serialNumber;
             set
             {
-                inventory = value;
+                serialNumber = value;
                 OnPropertyChanged();
             }
         }
@@ -276,12 +293,12 @@ namespace Equipment.VM
                 return add_mb_in_k ??= new RelayCommand(o =>
                 {
                     MB_K_M newItem = new MB_K_M();
-                    newItem.Komplekt_Id = Komplekt_id;
-                    newItem.MB_id = selectedItem.Id;
+                    newItem.Komplekt_guid = Komplekt_id;
+                    newItem.Motherboard_guid = selectedItem.GID;
                     newItem.Ports_id = selectedItem.Ports_id;
-                    if (inventory != "" && inventory != null)
+                    if (serialNumber != "" && serialNumber != null)
                     {
-                        newItem.Inventory = Inventory;
+                        newItem.SerialNumber = SerialNumber;
                         using (EqContext ec = new EqContext())
                         {
                             ec.Motherboards_K.Update(newItem);
@@ -289,7 +306,7 @@ namespace Equipment.VM
                             GetMb_K_Table();
                         }
                     }
-                }, o => SelectedItem != null && Inventory != null);
+                }, o => SelectedItem != null && SerialNumber != null);
             }
         }
         int allPageMb;
@@ -346,15 +363,15 @@ namespace Equipment.VM
                 var tmp = ec.Motherboards.
                     Where(x => SelectedFilterManufacturer == null ? x.Manufacturer.Contains("") : x.Manufacturer.Contains(SelectedFilterManufacturer.Manufacturer)).
                     Where(x => SelectedFilterModel == null ? x.Model.Contains("") : x.Model.Contains(SelectedFilterModel)).
-                    Where(x => SelectedFilterSocket == null ? true : x.Socket_id == ec.Socket.FirstOrDefault(o => o.Name.Contains(SelectedFilterSocket)).Id).
+                    Where(x => SelectedFilterSocket == null ? true : x.Socket_guid == ec.Socket.FirstOrDefault(o => o.Name.Contains(SelectedFilterSocket)).GID).
                     Skip((currentPageMb - 1) * 25).
                     Take(25).
                     ToList();
                 foreach (var item in tmp)
                 {
-                    item.Socket = ec.Socket.FirstOrDefault(x => x.Id == item.Socket_id);
-                    item.Chipset = ec.Chipset.FirstOrDefault(x => x.Id == item.Chipset_id);
-                    item.Ram_Type = ec.Ram_type.FirstOrDefault(x => x.Id == item.Ram_type_id);
+                    item.Socket = ec.Socket.FirstOrDefault(x => x.GID == item.Socket_guid);
+                    item.Chipset = ec.Chipset.FirstOrDefault(x => x.GID == item.Chipset_guid);
+                    item.Ram_Type = ec.Ram_type.FirstOrDefault(x => x.GID == item.Ram_type_guid);
                 }
 
                 MbTable = new ObservableCollection<MB_M>(tmp);
@@ -448,11 +465,11 @@ namespace Equipment.VM
 
             using (EqContext ec = new EqContext())
             {
-                AllPageMb_k = Convert.ToInt32(Math.Round(ec.Motherboards_K.Where(x => x.Komplekt_Id == Komplekt_id).Count() / 25d, MidpointRounding.ToPositiveInfinity));
-                var tmp = ec.Motherboards_K.Where(x => x.Komplekt_Id == Komplekt_id).Skip((CurrentPageMb_k - 1) * 25).Take(25).ToList();
+                AllPageMb_k = Convert.ToInt32(Math.Round(ec.Motherboards_K.Where(x => x.Komplekt_guid == Komplekt_id).Count() / 25d, MidpointRounding.ToPositiveInfinity));
+                var tmp = ec.Motherboards_K.Where(x => x.Komplekt_guid == Komplekt_id).Skip((CurrentPageMb_k - 1) * 25).Take(25).ToList();
                 foreach (var item in tmp)
                 {
-                    item.Motherboard = ec.Motherboards.FirstOrDefault(x => x.Id == item.MB_id);
+                    item.Motherboard = ec.Motherboards.FirstOrDefault(x => x.GID == item.Motherboard_guid);
                 }
                 Mb_K_table = new ObservableCollection<MB_K_M>(tmp);
             }

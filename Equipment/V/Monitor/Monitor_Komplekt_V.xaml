@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Equipment.V.Monitor"
         xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.V.Monitor.Monitor_Komplekt_V"
         mc:Ignorable="d"
-        Title="Monitor_Komplekt_V" Height="500" Width="900">
+        Title="Monitor_Komplekt_V" MinHeight="500" MinWidth="900">
     <Window.DataContext>
         <VM:Monitor_Komplekt_VM/>
     </Window.DataContext>
@@ -16,7 +16,7 @@
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Background="White" Grid.Column="0"> 
+        <StackPanel Background="White" Grid.Column="0" Margin="5"> 
             <TextBlock TextAlignment="Center" FontSize="18" Text="Мониторы" Background="#FF7BACD6" />
             <Menu>
                 <MenuItem Header="Управление...">
@@ -67,17 +67,6 @@
                             <StackPanel MinWidth="200" Margin="5">
                                 <TextBlock Text="Производитель:"/>
                                 <TextBox Text="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged}"/>
-                                <!--<ComboBox
-                                IsEditable="True"
-                                SelectedItem="{Binding NewManufacturer}" 
-                                ItemsSource="{Binding ManufacturerList}" 
-                                DataContext="{Binding DataContext, ElementName=page}"
-                                DisplayMemberPath="Manufacturer"
-                                IsTextSearchEnabled="True">
-                                <ComboBox.InputBindings>
-                                    <KeyBinding Command="{Binding SaveMonitor}" Key="Return"/>
-                                </ComboBox.InputBindings>
-                            </ComboBox>-->
                                 <Button VerticalAlignment="Center" Content="Сохранить" MinWidth="100" Margin="5,14,0,0" Command="{Binding SaveMonitor}" DataContext="{Binding DataContext, ElementName=page}"/>
                             </StackPanel>
                             <StackPanel MinWidth="200" Margin="5">
@@ -154,9 +143,18 @@
                 <Button Command="{Binding NextPage}" Grid.Column="2" HorizontalAlignment="Left" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="→" Cursor="Hand"/>
             </Grid>
         </StackPanel>
-        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0.2">
+        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0.2" Margin="5">
             <StackPanel >
-                <TextBlock Text="Мониторы в комплекте" TextAlignment="Center" FontSize="18" Background="#FF7BACD6"/>
+                <TextBlock Text="Мониторы в учёте" TextAlignment="Center" FontSize="18" Background="#FF7BACD6"/>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Поиск:"/>
+                    <TextBox/>
+                </StackPanel>
+                <CheckBox  Margin="5" IsChecked="True">
+                    <TextBlock>
+                        Отобразить мониторы в данном комплекте
+                    </TextBlock>
+                </CheckBox>
                 <DataGrid AutoGenerateColumns="False" 
                           ItemsSource="{Binding MonitorKomplektTable}" 
                           SelectedItem="{Binding SelectedMonitorKomplekt}"
@@ -168,13 +166,6 @@
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Id">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Id}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Производитель">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -192,12 +183,26 @@
                         <DataGridTemplateColumn Header="Инв. номер">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Inventory}"/>
+                                    <TextBlock Text="{Binding InventoryNumber.Inventory}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding PreviousPageUchet}" Grid.Column="0" HorizontalAlignment="Right" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="←" Cursor="Hand"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding CurrentPageUchet}" FontWeight="Bold" FontSize="14" Margin="5"/>
+                        <TextBlock Text="/" FontWeight="Bold" FontSize="14" Margin="5"/>
+                        <TextBlock Text="{Binding AllpageUchet}" FontWeight="Bold" FontSize="14" TextAlignment="Center" Margin="5"/>
+                    </StackPanel>
+                    <Button Command="{Binding NextPageUchet}" Grid.Column="2" HorizontalAlignment="Left" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="→" Cursor="Hand"/>
+                </Grid>
             </StackPanel>
         </Border>
     </Grid>

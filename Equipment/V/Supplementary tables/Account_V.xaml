@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Equipment.V.Supplementary_tables"
       xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.V.Supplementary_tables.Account_V"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Account_V">
@@ -13,57 +14,92 @@
     </Page.DataContext>
 
     <StackPanel>
-        <TextBlock HorizontalAlignment="Stretch" Background="Black" Foreground="White" TextAlignment="Center" FontSize="24"><Run Text="Аккаунты"/></TextBlock>
-        <StackPanel Orientation="Horizontal">
-            <ListView ItemsSource="{Binding AccountTable}" SelectedItem="{Binding SelectedItem}" Margin="0,0,10,0">
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Id}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                            <TextBlock Text="Id" FontSize="18"/>
-                        </GridViewColumn>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.Header>
-                                <TextBlock Text="Имя" FontSize="18"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Acc_user}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.Header>
-                                <TextBlock Text="Пароль" FontSize="18"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Password}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.Header>
-                                <TextBlock Text="Комментарий" FontSize="18"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Comment}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+        <StackPanel.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Обновить" Command="{Binding Refresh}"/>
+            </ContextMenu>
+        </StackPanel.ContextMenu>
+        <TextBlock Margin="5" HorizontalAlignment="Stretch" Background="#FF7BACD6" Foreground="White" TextAlignment="Center" FontSize="18">
+            <Run Text="Аккаунты"/>
+        </TextBlock>
+        <StackPanel Background="#FF7BACD6" Height="40" Orientation="Horizontal" Margin="5">
+            <StackPanel Margin="5,0,0,0" VerticalAlignment="Center">
+                <TextBlock Text="Поиск:" Foreground="White"/>
+                <TextBox MinWidth="140" Text="{Binding SearchBox, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding AcceptSearch}"/>
+                    </TextBox.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding AcceptSearch}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <StackPanel>
+                <ListView ItemsSource="{Binding AccountTable}" SelectedItem="{Binding SelectedItem}" Margin="0,0,10,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Id}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                                <TextBlock Text="Id" FontSize="18"/>
+                            </GridViewColumn>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.Header>
+                                    <TextBlock Text="Имя" FontSize="18"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Acc_user}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.Header>
+                                    <TextBlock Text="Пароль" FontSize="18"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Password}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.Header>
+                                    <TextBlock Text="Комментарий" FontSize="18"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Comment}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Grid Grid.Row="6" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding PreviousPage}" Grid.Column="0" HorizontalAlignment="Right" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="←"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding CurrentPage}" FontWeight="Bold" FontSize="14" Margin="5"/>
+                        <TextBlock Text="/" FontWeight="Bold" FontSize="14" Margin="5"/>
+                        <TextBlock Text="{Binding AllPage}" FontWeight="Bold" FontSize="14" TextAlignment="Center" Margin="5">
+                        </TextBlock>
+                    </StackPanel>
+                    <Button Command="{Binding NextPage}" Grid.Column="2" HorizontalAlignment="Left" Width="50" Background="#FF7BACD6" Foreground="Black" Height="30" FontSize="20" Content="→"/>
+                </Grid>
+            </StackPanel>
+            
             <StackPanel Width="400">
                 <StackPanel>
                     <Border Margin="0,0,0,20" BorderBrush="Gray" BorderThickness="1">
@@ -87,5 +123,6 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
+        
     </StackPanel>
 </Page>

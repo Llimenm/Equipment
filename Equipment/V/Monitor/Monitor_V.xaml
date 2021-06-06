@@ -15,16 +15,15 @@
     </Page.DataContext>
 
     <StackPanel Background="White">
-        <TextBlock TextAlignment="Center" FontSize="18" Text="Мониторы" Background="#FF7BACD6" />
+        <TextBlock TextAlignment="Center" FontSize="18" Foreground="White" Text="Мониторы" Background="#FF7BACD6" />
         <Menu>
             <MenuItem Header="Управление...">
                 <MenuItem Header="Добавить монитор" Command="{Binding AddMonitor}"/>
             </MenuItem>
         </Menu>
         <StackPanel Orientation="Horizontal" Height="50">
-            <TextBlock Text="Фильтры:" VerticalAlignment="Center" Background="#FF7BACD6" Margin="5,0,0,0"/>
             <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                <TextBlock Text="Производитель"/>
+                <TextBlock Text="Производитель:"/>
                 <ComboBox ItemsSource="{Binding ManufacturerList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding FilterManufacturer}" Width="130">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -34,7 +33,7 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                <TextBlock Text="Модель" />
+                <TextBlock Text="Модель:" />
                 <TextBox MinWidth="140" Text="{Binding FilterModel, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return" Command="{Binding AcceptFilter}"/>
@@ -60,19 +59,8 @@
                         <StackPanel MinWidth="200" Margin="5">
                             <TextBlock Text="Производитель:"/>
                             <TextBox Text="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged}">
-                                
+
                             </TextBox>
-                            <!--<ComboBox
-                                IsEditable="True"
-                                SelectedItem="{Binding NewManufacturer}" 
-                                ItemsSource="{Binding ManufacturerList}" 
-                                DataContext="{Binding DataContext, ElementName=page}"
-                                DisplayMemberPath="Manufacturer"
-                                IsTextSearchEnabled="True">
-                                <ComboBox.InputBindings>
-                                    <KeyBinding Command="{Binding SaveMonitor}" Key="Return"/>
-                                </ComboBox.InputBindings>
-                            </ComboBox>-->
                         </StackPanel>
                         <StackPanel MinWidth="200" Margin="5">
                             <TextBlock Text="Модель:"/>
@@ -89,17 +77,6 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.Header>
-                        <TextBlock Text="Id" Width="auto"/>
-                    </DataGridTemplateColumn.Header>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Id}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
                         <TextBlock Text="Производитель" Width="auto"/>

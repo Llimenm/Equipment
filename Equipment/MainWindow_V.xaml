@@ -6,12 +6,13 @@
     xmlns:local="clr-namespace:Equipment"
     xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.MainWindow"
     mc:Ignorable="d"
-    Title="MainWindow" 
-    Height="720" 
-    Width="1"
+    Title="Учет оборудования" 
+    Height="750" 
+    Width="1300"
     MinHeight="750"
     MinWidth="1300"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen"
+    Icon="/pc.png">
     <Window.DataContext>
         <VM:MainWindow_VM/>
     </Window.DataContext>
@@ -24,8 +25,6 @@
             <RowDefinition Height="20"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-        </Menu>
         <TreeView Grid.Row="1" Grid.Column="0" >
             <!-- Лист таблиц -->
             <TreeViewItem>
@@ -33,7 +32,7 @@
                     <TextBlock Text="Комплекты"/>
                 </TreeViewItem.Header>
                 <TreeViewItem Header="Таблица комплектов" IsSelected="{Binding KomplectIsSelect}"/>
-                <TreeViewItem >
+                <TreeViewItem>
                     <TreeViewItem.Header>
                         <TextBlock Text="Вспомогательные компоненты"/>
                     </TreeViewItem.Header>
@@ -50,6 +49,6 @@
                 </TreeViewItem>
             </TreeViewItem>
         </TreeView>
-        <Frame Grid.Row="1" Grid.Column="1" Content="{Binding FrameForPage}" HorizontalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        <Frame Grid.Row="1" Grid.Column="1" Content ="{Binding FrameForPage}" HorizontalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

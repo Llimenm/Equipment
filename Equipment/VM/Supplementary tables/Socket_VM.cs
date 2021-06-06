@@ -11,7 +11,7 @@ using OKB3Admin;
 
 namespace Equipment.VM
 {
-    public class Socket_VM : Base_VM
+    public class Socket_VM : BaseModelForVM
     {
         public Socket_VM()
         {

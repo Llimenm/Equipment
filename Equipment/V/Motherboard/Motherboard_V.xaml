@@ -19,7 +19,9 @@
             </MenuItem>
         </Menu>
         <StackPanel Grid.Row="1">
-            <TextBlock Text="Материнские платы" HorizontalAlignment="Stretch" TextAlignment="Center" Background="Black" Foreground="White" Margin="5"/>
+            <TextBlock Margin="5" HorizontalAlignment="Stretch" Background="#FF7BACD6" Foreground="White" TextAlignment="Center" FontSize="18">
+            <Run Text="Материнские платы"/>
+            </TextBlock>
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock FontWeight="Bold" Text="Фильтрация:" Margin="0,0,20,0" VerticalAlignment="Center"/>
                 <StackPanel Margin="0,0,10,0">
@@ -130,13 +132,6 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="ID">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Id}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Производитель">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
 namespace Equipment.VM
 {
-    class Type_equipment_VM : Base_VM
+    class Type_equipment_VM : BaseModelForVM
     {
         public Type_equipment_VM()
         {
@@ -48,7 +48,7 @@ namespace Equipment.VM
             await Task.CompletedTask;
         }
 
-        Type_eq_M newItem;
+        Type_eq_M newItem = new Type_eq_M();
         public Type_eq_M NewItem
         {
             get => newItem;

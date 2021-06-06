@@ -5,10 +5,8 @@ using System.Text;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Monitor_M : Base_M
+    public class Monitor_M : BaseModelWithGUID
     {
-        public int Id { get; set; }
-
         string manufacturer;
         public string Manufacturer
         {

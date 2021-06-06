@@ -1,76 +1,79 @@
 ﻿using OKB3Admin;
 using OKB3Admin.M;
+using OKB3Admin.M.Structura;
+using OKB3Admin.M.InventorySystem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Komplekt_M : Base_M
+    public class Komplekt_M : BaseModelWithGUID
     {
-        public int Id { get; set; }
-        int status_id;
-        /// <summary>
-        /// Id статуса
-        /// </summary>
-        int type_eq_id;
+        Guid? type_eq_guid;
         /// <summary>
         /// Тип оборудования
         /// </summary>
-        public int Type_eq_id
+        public Guid? Type_eq_guid
         {
-            get => type_eq_id;
+            get => type_eq_guid;
             set
             {
-                type_eq_id = value;
+                type_eq_guid = value;
                 OnPropertyChanged();
             }
         }
-        public int Status_id
+
+        Guid? status_guid;
+        /// <summary>
+        /// Id статуса
+        /// </summary>
+        public Guid? Status_guid
         {
-            get => status_id;
+            get => status_guid;
             set
             {
-                status_id = value;
+                status_guid = value;
                 OnPropertyChanged();
             }
         }
         /// <summary>
         /// Инвентарный номер
         /// </summary>
-        string inventory;
-        public string Inventory
+        int inventory_id;
+        public int Inventory_id
         {
-            get => inventory;
+            get => inventory_id;
             set
             {
-                inventory = value;
+                inventory_id = value;
                 OnPropertyChanged();
             }
         }
 
-        int otdelenie_Id;
-        public int Otdelenie_Id
+        Guid? otdelenie_gid;
+        public Guid? Otdelenie_gid
         {
-            get => otdelenie_Id;
+            get => otdelenie_gid;
             set
             {
-                otdelenie_Id = value;
+                otdelenie_gid = value;
                 OnPropertyChanged();
             }
         }
 
-        int acc_id;
+        int account_id;
         /// <summary>
         /// Id админки комплекта
         /// </summary>
-        public int Acc_id
+        public int Account_id
         {
-            get => acc_id;
+            get => account_id;
             set
             {
-                acc_id = value;
+                account_id = value;
                 OnPropertyChanged();
             }
         }
@@ -85,15 +88,19 @@ namespace Equipment.M.EquipmentContext.Models
                 OnPropertyChanged();
             }
         }
-       [ForeignKey("Status_id")]
+        [ForeignKey("Status_guid")]
         public Status_M Status { get; set; }
 
-       
-        [ForeignKey("Acc_id")]
+        [ForeignKey("Account_id")]
         public Account_M Account { get; set; }
+
         [NotMapped]
         public Otdelenie_M Otdelenie { get; set; }
-        [ForeignKey("Type_eq_id")]
+
+        [NotMapped]
+        public InventoryNumber_M InventoryNumber { get; set; }
+
+        [ForeignKey("Type_eq_guid")]
         public Type_eq_M Type_Eq { get; set; }
 
 

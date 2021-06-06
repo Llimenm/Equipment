@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Ports_M : Base_M
+    public class Ports_M : BaseModelWithID
     {
-        public int Id { get; set; } //В модели указано количество портов на то или иное устройство
         int vga;
         public int VGA
         {

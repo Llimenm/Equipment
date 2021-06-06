@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Equipment.VM
 {
-    public class Monitor_VM : Base_VM
+    public class Monitor_VM : BaseModelForVM
     {
         public Monitor_VM() { }
 

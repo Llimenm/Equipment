@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Equipment.VM
 {
-    public class Ram_type_VM : Base_VM
+    public class Ram_type_VM : BaseModelForVM
     {
         public Ram_type_VM()
         {

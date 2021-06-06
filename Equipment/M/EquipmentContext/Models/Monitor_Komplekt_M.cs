@@ -3,38 +3,63 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using OKB3Admin;
+using OKB3Admin.M.InventorySystem;
+using OKB3Admin.M.Structura;
+
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Monitor_Komplekt_M : Base_M
+    public class Monitor_Komplekt_M : BaseModelWithID
     {
-        public int Id { get; set; }
-        int komplekt_id;
-        public int Komplekt_id
+        Guid? komplekt_guid;
+        public Guid? Komplekt_guid
         {
-            get => komplekt_id;
+            get => komplekt_guid;
             set
             {
-                komplekt_id = value;
+                komplekt_guid = value;
                 OnPropertyChanged();
             }
         }
-        int monitor_id;
-        public int Monitor_id
+        Guid? monitor_guid;
+        public Guid? Monitor_guid
         {
-            get => monitor_id;
+            get => monitor_guid;
             set
             {
-                monitor_id = value;
+                monitor_guid = value;
                 OnPropertyChanged();
             }
         }
-        string inventory;
-        public string Inventory
+
+        Guid? otdelenie_guid;
+        public Guid? Otdelenie_guid
         {
-            get => inventory;
+            get => otdelenie_guid;
             set
             {
-                inventory = value;
+                otdelenie_guid = value;
+                OnPropertyChanged();
+            }
+        }
+
+        Guid? status_guid;
+        public Guid? Status_guid
+        {
+            get => status_guid;
+            set
+            {
+                status_guid = value;
+                OnPropertyChanged();
+            }
+        }
+
+        int inventory_id;
+        public int Inventory_id
+        {
+            get => inventory_id;
+            set
+            {
+                inventory_id = value;
                 OnPropertyChanged();
             }
         }
@@ -49,10 +74,19 @@ namespace Equipment.M.EquipmentContext.Models
             }
         }
 
-        [ForeignKey("Komplekt_id")]
+        [NotMapped]
+        public InventoryNumber_M InventoryNumber { get; set; }
+
+        [NotMapped]
+        public Otdelenie_M Otdelenie { get; set; }
+
+        [ForeignKey("Komplekt_guid")]
         public Komplekt_M Komplekt { get; set; }
-        [ForeignKey("Monitor_id")]
+
+        [ForeignKey("Monitor_guid")]
         public Monitor_M Monitor { get; set; }
 
+        [ForeignKey("Status_guid")]
+        public Status_M Status { get; set; }
     }
 }

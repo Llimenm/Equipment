@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
 namespace Equipment.VM
 {
-    public class Chipset_VM :Base_VM
+    public class Chipset_VM :BaseModelForVM
     {
         public Chipset_VM()
         {
@@ -48,7 +48,7 @@ namespace Equipment.VM
                 var tmp = ec.Chipset.ToList();
                 foreach (var item in tmp)
                 {
-                        item.Socket = ec.Socket.FirstOrDefault(x => x.Id == item.Socket_id);
+                        item.Socket = ec.Socket.FirstOrDefault(x => x.GID == item.Socket_guid);
                    
                 }
                 ChipsetTable = new ObservableCollection<Chipset_M>(tmp);
@@ -133,7 +133,7 @@ namespace Equipment.VM
                     if ((window.DataContext as Select_socket_on_chipset_VM).SelectedItem != null)
                     {
                         NewItem.Socket = (window.DataContext as Select_socket_on_chipset_VM).ChooosedSocket;
-                        NewItem.Socket_id = NewItem.Socket.Id;
+                        NewItem.Socket_guid = NewItem.Socket.GID;
                     }
                     
                     OnPropertyChanged("NewItem");
@@ -154,7 +154,7 @@ namespace Equipment.VM
                     if ((window.DataContext as Select_socket_on_chipset_VM).SelectedItem != null)
                     {
                         SelectedItem.Socket = (window.DataContext as Select_socket_on_chipset_VM).ChooosedSocket;
-                        SelectedItem.Socket_id = SelectedItem.Socket.Id;
+                        SelectedItem.Socket_guid = SelectedItem.Socket.GID;
                     }
 
                     OnPropertyChanged("SelectedItem");

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
 
 namespace Equipment.M.EquipmentContext.Models
 {
-    public class Chipset_M : Base_M
+    public class Chipset_M : BaseModelWithGUID
     {
-        public int Id { get; set; }
         string name;
         /// <summary>
         /// Имя чипсета     
@@ -22,21 +23,20 @@ namespace Equipment.M.EquipmentContext.Models
                 OnPropertyChanged();
             }
         }
-        int socket_id;
+        Guid? socket_guid;
         /// <summary>
         /// ID сокета
         /// </summary>
-        public int Socket_id
+        public Guid? Socket_guid
         {
-            get => socket_id;
+            get => socket_guid;
             set
             {
-                socket_id = value;
+                socket_guid = value;
                 OnPropertyChanged();
             }
         }
-
-        [NotMapped]
+        [ForeignKey("Socket_guid")]
         public Socket_M Socket { get; set; }
     }
 }

@@ -1,0 +1,907 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OKB3Admin</name>
+    </assembly>
+    <members>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreatePodrazdelenie(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер подразделений
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateKorpus(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер корпусов
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateOtdelenie(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер Отделений
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateInventorization(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер  инвенртаризации
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateVersion(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер версий и модулей
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateTelefone(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер подразделений
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateUsers(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер пользователей
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateUsersDostup(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер доступа пользователей
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateStaf(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер сотрудников
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateERRaport(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер жлектронных рапортов
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Manufacturers">
+            <summary>
+            Список производителей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Printer_Models">
+            <summary>
+            Словарь. Список моделей для принетров.
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Printers">
+            <summary>
+            Список принтеров
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Printer_Statuses">
+            <summary>
+            Словарь. Список статусов для <see cref="T:OKB3Admin.M.Printers.Printer"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Printer_StatusLogs">
+            <summary>
+            Список изменений статусов, которые происходили с <see cref="T:OKB3Admin.M.Printers.Printer"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Cartridge_StatusLogs">
+            <summary>
+            Список изменений статусов, которые происходили с <see cref="T:OKB3Admin.M.Printers.Cartridge"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Cartridge_Statuses">
+            <summary>
+            Словарь. Список статусов для <see cref="T:OKB3Admin.M.Printers.Cartridge"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Cartridge_Models">
+            <summary>
+            Словарь. Содержит список <see cref="T:OKB3Admin.M.Printers.Cartridge_Model"/> для <see cref="T:OKB3Admin.M.Printers.Cartridge"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Cartridges">
+            <summary>
+            Список картриджей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.Connection.MainAppContext.Logs">
+            <summary>
+            Логи
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Agents.Address_m.gorod">
+            <summary>
+            Город подразделения
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Agents.Address_m.ulica">
+            <summary>
+            Улица подразделения
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Agents.Address_m.dom">
+            <summary>
+            Дом подразделения
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Agents.Address_m.postIndex">
+            <summary>
+            почтовый индекс
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Data.IDeleteMarkable">
+            <summary>
+            Обязывает класс содержать свойство типа <see cref="T:System.Boolean"/> DeleteMark, которое отвечает за метку удаления записи.
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Data.IDeleteMarkable.DeleteMark">
+            <summary>
+            Метка удаления
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.InventorySystem.InventoryNumber_M.Inventory">
+            <summary>
+            Инвентарный номер
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.InventorySystem.InventoryNumber_M.OtdelenieGID">
+            <summary>
+            <see cref="T:System.Guid"/>-ссылка на отделение, которому принадлежит <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.InventorySystem.InventoryNumber_M.Otdelenie">
+            <summary>
+            Отделение
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.LogCategoryEnum">
+            <summary>
+            Категория лога (Добавление, изменение, удаление)
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogCategoryEnum.Добавление">
+            <summary>
+            Используется когда в базу данных добавляется новая запись
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogCategoryEnum.Изменение">
+            <summary>
+            Используется при изменении записи в БД
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogCategoryEnum.Удаление">
+            <summary>
+            Используется при удалении записи из БД
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.LogTypeEnum">
+            <summary>
+            Тип лога указывает на объект с которым происходит изменение.
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogTypeEnum.Принтер">
+            <summary>
+            Изменение записи типа <see cref="T:OKB3Admin.M.Printers.Printer"/> и его производных. Например: <see cref="T:OKB3Admin.M.Printers.Printer_Model"/>
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogTypeEnum.Картридж">
+            <summary>
+            Изменение записи типа <see cref="T:OKB3Admin.M.Printers.Cartridge"/> и его производных. Например: <see cref="T:OKB3Admin.M.Printers.Cartridge_Model"/>
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Log">
+            <summary>
+            Лог изменений
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.Printers.Log.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.Printers.Log.#ctor(OKB3Admin.M.Printers.LogCategoryEnum,OKB3Admin.M.Printers.LogTypeEnum,System.String,System.String)">
+            <summary>
+            Конструктор класса <see cref="T:OKB3Admin.M.Printers.Log"/>
+            </summary>
+            <param name="logCategoryEnum">Категория лога типа</param>
+            <param name="logTypeEnum">Тип объекта с которым произошли изменения</param>
+            <param name="changes">Список изменений</param>
+            <param name="itemId">Объект с которым произошли. Например: <see cref="T:System.Guid"/> для <see cref="T:OKB3Admin.M.Printers.Printer"/> </param>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Log.Changes">
+            <summary>
+            Произведенные изменения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Log.ChangeDate">
+            <summary>
+            Время лога
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Log.ItemId">
+            <summary>
+            Идентификатор предмета с которым произошли изменения. Например: <see cref="T:System.Guid"/> для <see cref="T:OKB3Admin.M.Printers.Printer"/> и <see cref="T:OKB3Admin.M.Printers.Cartridge"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Log.LogCategoryEnum">
+            <summary>
+            Категория лога (Добавление, изменение или удаление)
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Log.LogTypeEnum">
+            <summary>
+            Тип объекта с которым произошли изменения.
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Log.UserId">
+            <summary>
+            <see cref="T:System.Guid"/> пользователя, который совершил изменение
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Cartridge">
+            <summary>
+            Картридж C:
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.AsuId">
+            <summary>
+            Номер выданный отделом АСУ
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.ModelGuid">
+            <summary>
+            Guid-ссылка на модель <see cref="T:OKB3Admin.M.Printers.Cartridge_Model"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.CartridgeModel">
+            <summary>
+            Модель картриджа
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.Otdel">
+            <summary>
+            Отделение котрому принадлежит картридж
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.StatusCode">
+            <summary>
+            Ссылка на <see cref="T:OKB3Admin.M.Printers.Cartridge_Status"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.Status">
+            <summary>
+            Текущий статус картриджа
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.Changelog">
+            <summary>
+            Список изменений произведенный с данным картриджом
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge.DeleteMark">
+            <summary>
+            Метка удаления
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Cartridge_Model">
+            <summary>
+            Модель картриджа. Не является самим картриджом!
+            </summary>
+            <seealso cref="T:OKB3Admin.M.Printers.Cartridge"/>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.Guid">
+            <summary>
+            <see cref="T:System.Guid"/>-ссылка на объект
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.Name">
+            <summary>
+            Наименование модели
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.Group">
+            <summary>
+            Группа картриджа
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.ManufacturerGuid">
+            <summary>
+            Guid-сслыка на <see cref="T:OKB3Admin.M.Printers.Manufacturer"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.Manufacturer">
+            <summary>
+            <see cref="T:OKB3Admin.M.Printers.Manufacturer"/> данного картриджа
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.Cartridges">
+            <summary>
+            Список <see cref="T:OKB3Admin.M.Printers.Cartridge"/>, которые принадлежат данной модели.
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Model.DeleteMark">
+            <summary>
+            Метка удаления
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Cartridge_Status">
+            <summary>
+            Статус картриджа
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Status.Name">
+            <summary>
+            Название статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_Status.StatusCode">
+            <summary>
+            Код статуса
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Cartridge_StatusLog">
+            <summary>
+            Запись о изменении статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.CartridgeGuid">
+            <summary>
+            АСУ номер <see cref="T:OKB3Admin.M.Printers.Cartridge"/> с которым произошли изменения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.Cartridge">
+            <summary>
+            <see cref="T:OKB3Admin.M.Printers.Cartridge"/> с которым произошли изменения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.NewStatusCode">
+            <summary>
+            Код нового статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.OldStatusCode">
+            <summary>
+            Код прошлого статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.OldStatus">
+            <summary>
+            Прошлый <see cref="T:OKB3Admin.M.Printers.Cartridge_Status"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.NewStatus">
+            <summary>
+            Новый <see cref="T:OKB3Admin.M.Printers.Cartridge_Status"/>
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:OKB3Admin.M.Printers.Cartridge_StatusLog.OldOtdelenieGuid" -->
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.NewOtdelenieGuid">
+            <summary>
+            <see cref = "T:System.Guid" /> нового отделения(<see cref = "T:OKB3Admin.M.Structura.Otdelenie_M" />)
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.OldOtdelenie">
+            <summary>
+            Объект старого отделения (<see cref="T:OKB3Admin.M.Structura.Otdelenie_M"/>)
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.NewOtdelenie">
+            <summary>
+            Новое <see cref="T:OKB3Admin.M.Structura.Otdelenie_M"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.DateTime">
+            <summary>
+            Дата совершения изменения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Cartridge_StatusLog.Commentary">
+            <summary>
+            Комментарий о совершенном изменении
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Manufacturer">
+            <summary>
+            Производитель принтеров и картриджей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Manufacturer.Guid">
+            <summary>
+            <see cref="T:System.Guid"/>-ссылка на данного производителя
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Manufacturer.Name">
+            <summary>
+            Имя производителя
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Manufacturer.Models">
+            <summary>
+            Список моделей от данного производителя
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Manufacturer.DeleteMark">
+            <summary>
+            Пометка удаления
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Printer">
+            <summary>
+            Принтеррр
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.Guid">
+            <summary>
+            <see cref="T:System.Guid"/>-ccылка на принтер
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.AsuId">
+            <summary>
+            АСУ номер принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.ModelGuid">
+            <summary>
+            <see cref="T:System.Guid"/>-ссылка на <see cref="T:OKB3Admin.M.Printers.Printer_Model"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.PrinterModel">
+            <summary>
+            Модель принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.InventoryNumber">
+            <summary>
+            Инвентарный номер, а также ссылка на <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.InventoryData">
+            <summary>
+            Ссылка на <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.IsNetwork">
+            <summary>
+            Является ли принтер сетевым
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.MAC">
+            <summary>
+            MAC-адрес принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.HardwareName">
+            <summary>
+            Имя устройство (сетевое)
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.StatusCode">
+            <summary>
+            Код статуса принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.Status">
+            <summary>
+            Текущий статус принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.Changelogs">
+            <summary>
+            История изменений <see cref="T:OKB3Admin.M.Printers.Printer_Status"/> данного принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer.DeleteMark">
+            <summary>
+            Метка удаления
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.Printers.Printer.Clone">
+            <summary>
+            Создает клон обьекта
+            </summary>
+            <returns>Клон объекта <see cref="T:OKB3Admin.M.Printers.Printer"/></returns>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Printer_Model">
+            <summary>
+            Модель принтера. Не является самим принтером!
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Model.Guid">
+            <summary>
+            <see cref="T:System.Guid"/>-ссылка на модель
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Model.Name">
+            <summary>
+            Название модели
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Model.ManufacturerGuid">
+            <summary>
+            <see cref="P:OKB3Admin.M.Printers.Printer_Model.Guid"/>-ссылка на <see cref="P:OKB3Admin.M.Printers.Printer_Model.Manufacturer"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Model.Manufacturer">
+            <summary>
+            Производитель данной модели
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Model.DeleteMark">
+            <summary>
+            Пометка удаления
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Model.Printers">
+            <summary>
+            Список <see cref="T:OKB3Admin.M.Printers.Printer"/> относящийся к данной модели.
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Printer_Status">
+            <summary>
+            Статусы принетров
+            </summary>
+            <seealso cref="T:OKB3Admin.M.Printers.Printer"/>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Status.Name">
+            <summary>
+            Название статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_Status.StatusCode">
+            <summary>
+            Код статуса
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.Printers.Printer_StatusLog">
+            <summary>
+            Запись о смене статуса принтера
+            </summary>
+            <seealso cref="T:OKB3Admin.M.Printers.Printer_Status"/>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.Printer">
+            <summary>
+            <see cref="T:OKB3Admin.M.Printers.Printer"/> с которым произошли изменения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.PrinterGuid">
+            <summary>
+            <see cref="T:System.Guid"/>-ссылка на <see cref="T:OKB3Admin.M.Printers.Printer"/>
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.OldStatusCode">
+            <summary>
+            Код предыдущего статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.NewStatusCode">
+            <summary>
+            Код новго статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.Commentary">
+            <summary>
+            Комментарий смены статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.ChangeDate">
+            <summary>
+            Дата изменения статуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.OldStatus">
+            <summary>
+            Предыдущий <see cref="T:OKB3Admin.M.Printers.Printer_Status"/> принтера
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Printers.Printer_StatusLog.NewStatus">
+            <summary>
+            Новый <see cref="T:OKB3Admin.M.Printers.Printer_Status"/> принтенра
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.ERaports.ER_Raport.ErRaportId_base">
+            <summary>
+            ссылка на рапорт, если причиной инициации является другйо рапорт
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.ERaports.ER_Raport.PositionNumber">
+            <summary>
+            номер отделения в текущем навигационом маршруте
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.ERaports.ER_Raport.ERRaportShablon_obj">
+            <summary>
+            ссылка на шаблон рапорта
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.RequestServis.ERaports.ER_Raport.SetNavigation">
+            <summary>
+            преобразует колекцию навигации в строку json
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.RequestServis.ERaports.ER_Raport.GetNavigation">
+            <summary>
+            переводит строку json в коллекцию навигации
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.RequestServis.ERaports.ER_Raport.SetTextTable">
+            <summary>
+            прнобрпзует коллекцию в строку json
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.RequestServis.ERaports.ER_Raport.GetTextTable">
+            <summary>
+            прнобрпзует строку json в коллекцию
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.RequestServis.ERaports.ER_Raport_Shablon.SetNavigation">
+            <summary>
+            преобразует колекцию навигации в строку json
+            </summary>
+        </member>
+        <member name="M:OKB3Admin.M.RequestServis.ERaports.ER_Raport_Shablon.GetNavigation">
+            <summary>
+            переводит строку json в коллекцию навигации
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.RequestServis.RequestAdvice_M">
+            <summary>
+            совет к подкатегории для решения предпологаемой проблемы
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestAdvice_M.RequestSpecificSubCategory_SpecificSubIndex">
+            <summary>
+            индекс уточнения для которого создается совет
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestAdvice_M.DiscriptionAdvice">
+            <summary>
+            описание с овета / сам совет который нужно дать для решения этой проблемы
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestAdvice_M.Img">
+            <summary>
+            картинка для совета
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestAdvice_M.ImgName">
+            <summary>
+            имя картинки для бд
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.RequestServis.RequestCategory_M">
+            <summary>
+            Категории заявок
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestCategory_M.NameCategory">
+            <summary>
+            название категорий
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestCategory_M.Index">
+            <summary>
+            индекс категории
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.RequestServis.RequestSpecificSubCategory">
+            <summary>
+            уточнение проблемы для подкатегории
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSpecificSubCategory.SubCategoryIndex">
+            <summary>
+            Индекс родительской подкатегории категории
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSpecificSubCategory.NameSpecificSubCategory">
+            <summary>
+            Название  уточнения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSpecificSubCategory.SpecificIndex">
+            <summary>
+            индекс уточнения
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.M.RequestServis.RequestSubCategory_M">
+            <summary>
+            Подкатегория заявки
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSubCategory_M.CategoryGID">
+            <summary>
+            Индекс родительской категории
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSubCategory_M.NameSubCategory">
+            <summary>
+            Название под категории
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSubCategory_M.SubIndex">
+            <summary>
+            индекс подкатегории
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.RequestServis.RequestSubCategory_M.ModuleIndex">
+            <summary>
+            ИМЯ модуля к которому принадлежит категория и подкатегория
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.FIO">
+            <summary>
+            ФИО в одну строку
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.Snils">
+            <summary>
+            СНИЛС сотрудника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.MainTabelNumber">
+            <summary>
+            Основной табельный номер
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.UserGID">
+            <summary>
+            GUID юзера работника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.User">
+            <summary>
+            ссылка на пользователя
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.OtdelenieGID">
+            <summary>
+            GUID отделения работника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.Otdelenie">
+            <summary>
+            Ссылка на отделение работника
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Structura.Korpus_M.name">
+            <summary>
+            Название корпуса
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Structura.Podrazdelenie_M.main_name">
+            <summary>
+            Название подразделения
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Structura.Podrazdelenie_M.psevdonim">
+            <summary>
+            Всевдоним подразделения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaEntryData.FreeBedCount">
+            <summary>
+            всего свободных кроватей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaEntryData.ComercialBed">
+            <summary>
+            из них комерческих
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaEntryData.NotRarBedCount">
+            <summary>
+            из них обычныч кроватей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaEntryData.MBedCount">
+            <summary>
+            мужчин
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaEntryData.WBedCount">
+            <summary>
+            женщин
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalData_M.CurCount">
+            <summary>
+            состоит
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalData_M.FreeBedCount">
+            <summary>
+            всего свободных кроватей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalData_M.ComercialBed">
+            <summary>
+            из них комерческих
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalData_M.NotRarBedCount">
+            <summary>
+            из них обычныч кроватей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalData_M.MBedCount">
+            <summary>
+            мужчин
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalData_M.WBedCount">
+            <summary>
+            женщин
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalHistory_M.CurCount">
+            <summary>
+            состоит
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalHistory_M.FreeBedCount">
+            <summary>
+            всего свободных кроватей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalHistory_M.ComercialBed">
+            <summary>
+            из них комерческих
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalHistory_M.NotRarBedCount">
+            <summary>
+            из них обычныч кроватей
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalHistory_M.MBedCount">
+            <summary>
+            мужчин
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Svodka.SvodkaTotalHistory_M.WBedCount">
+            <summary>
+            женщин
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Users.UserDostup_M.UserGID">
+            <summary>
+            GUID отделения работника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Users.Users_M.SotridnikGID">
+            <summary>
+            GUID сотрудника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Users.Users_M.Sotrudnik">
+            <summary>
+            Ссылка на сотрудника в отделе кадров
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.BaseModel">
+            <summary>
+            Абстрактная базовая модель
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.BaseModelWithGUID">
+            <summary>
+            Абстрактная базовая с GUID
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.BaseModelWithGUID.GID">
+            <summary>
+            GUID модели
+            </summary>
+        </member>
+        <member name="T:OKB3Admin.BaseModelWithID">
+            <summary>
+            Абстрактная базовая модель без GUID
+            </summary>
+        </member>
+    </members>
+</doc>

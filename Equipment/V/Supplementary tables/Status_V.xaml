@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Equipment.V.Komplekt"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-      xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.V.Komplekt.Status_V"
+      xmlns:VM="clr-namespace:Equipment.VM" 
+    x:Class="Equipment.V.Komplekt.Status_V"
       mc:Ignorable="d" 
       d:DesignHeight="684" 
       d:DesignWidth="1047"
@@ -15,8 +16,8 @@
     </Page.DataContext>
 
     <StackPanel Background="White">
-        <TextBlock HorizontalAlignment="Stretch" Background="Black" Foreground="White" TextAlignment="Center" FontSize="24"> 
-            Статусы
+        <TextBlock Margin="5" HorizontalAlignment="Stretch" Background="#FF7BACD6" Foreground="White" TextAlignment="Center" FontSize="18">
+            <Run Text="Статусы"/>
         </TextBlock>
         <StackPanel Orientation="Horizontal">
             <ListView ItemsSource="{Binding StatusTable}" SelectedItem="{Binding SelectedItem}" Margin="0,0,10,0">
@@ -27,16 +28,6 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.Header>
-                                <TextBlock Text="Id" FontSize="18"/>
-                            </GridViewColumn.Header>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Id}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
                         <GridViewColumn Width="auto">
                             <GridViewColumn.Header>
                                 <TextBlock Text="Наименование статуса" FontSize="18"/>
