@@ -57,7 +57,8 @@
             <DataGrid CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding MonitorTable, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMonitor, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Добавть в комплект" Command="{Binding AddMonitor_in_Komplekt}"/>
+                        <MenuItem Header="Добавить в учет и в комплект" Command=""/>
+                        <MenuItem Header="Добавть в учет" Command="{Binding AddMonitor_in_Komplekt}"/>
                         <MenuItem Header="Удалить" Command="{Binding DeleteMonitor}"/>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
@@ -148,7 +149,7 @@
                 <TextBlock Text="Мониторы в учёте" TextAlignment="Center" FontSize="18" Background="#FF7BACD6"/>
                 <StackPanel Margin="5">
                     <TextBlock Text="Поиск:"/>
-                    <TextBox/>
+                    <TextBox Text="{Binding SearchBox}"/>
                 </StackPanel>
                 <CheckBox  Margin="5" IsChecked="True">
                     <TextBlock>

@@ -50,6 +50,17 @@ namespace Equipment.VM
             }
         }
 
+        string searchBox;
+        public string SearchBox
+        {
+            get => searchBox;
+            set
+            {
+                searchBox = value;
+                OnPropertyChanged();
+            }
+        }
+
         Monitor_Komplekt_M selectedMonitorKomplekt;
         public Monitor_Komplekt_M SelectedMonitorKomplekt
         {
@@ -83,7 +94,10 @@ namespace Equipment.VM
         {
             using (EqContext ec = new EqContext())
             {
-                ObservableCollection<Monitor_Komplekt_M> tmp =new ObservableCollection<Monitor_Komplekt_M>(ec.Monitor_komplekt.Where(x => x.Komplekt_guid == komplekt_guid));
+                ObservableCollection<Monitor_Komplekt_M> tmp =new ObservableCollection<Monitor_Komplekt_M>
+                    (ec.Monitor_komplekt.
+                    Where(x => x.Komplekt_guid == komplekt_guid 
+                    && (x.Monitor.Manufacturer.Contains(SearchBox) || x.Monitor.Model.Contains(SearchBox) || x.InventoryNumber.Inventory.Contains(SearchBox))));
                 Komplekt_id = komplekt_guid;
                 return tmp;
             }
@@ -116,6 +130,8 @@ namespace Equipment.VM
                 tmp = GetMonitorKomplekt();
             }
 
+            allPageUchet = Convert.ToInt32(Math.Ceiling(tmp.Count() / 25d));
+            MonitorKomplektTable = new ObservableCollection<Monitor_Komplekt_M>(tmp.Skip((CurrentPageUchet - 1) * 25).Take(25));
 
         }
 
@@ -142,9 +158,18 @@ namespace Equipment.VM
                                     Komplekt_guid = Komplekt_id,
                                     Ports_id = SelectedMonitor.Ports_id
                                 };
+                                InventoryNumber_M NewInventory = new InventoryNumber_M
+                                {
+                                    Inventory = InventoryName
+                                };
+
+                                entcon.InventoryNumbers.Update(NewInventory);
+                                entcon.SaveChanges();
+                                NewMonitorInKomplekt.Inventory_id = entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == InventoryName).Id;
+
                                 ec.Monitor_komplekt.Update(NewMonitorInKomplekt);
                                 ec.SaveChanges();
-                                Task.Run(() => GetMonitorKomplekt(Komplekt_id));
+                                GetMonitorKomplekt_checkbox();
                                 InventoryName = null;
                             }
                         }
@@ -175,7 +200,7 @@ namespace Equipment.VM
 
         #region Пагинация для мониторов в учете
 
-        int currentPageUchet;
+        int currentPageUchet = 1;
         public int CurrentPageUchet
         {
             get => currentPageUchet;

@@ -21,14 +21,7 @@ namespace Equipment.VM
 {
     public class Komplekt_VM : BaseModelForVM
     {
-        public Komplekt_VM() //Инициализация 
-        {
-            NewItem = new Komplekt_M
-            {
-                Account = new Account_M()
-
-            };
-        }
+        public Komplekt_VM() { }
 
         #region Get Запросы на выборку данных
         public void GetStartData() //получение данных
@@ -50,33 +43,45 @@ namespace Equipment.VM
 
         public void GetEndKomplekt()
         {
-            using (EqContext ec = new EqContext())
+            using(EntityContext entcon = new EntityContext())
             {
-                var i = ec.Komplekt.Include(x => x.Account).
-                    Where
-                    (x =>
-                    (string.IsNullOrEmpty(FilterName) ? x.Account.Acc_user.Contains("") : x.Account.Acc_user.Contains(FilterName))
-                    & (SelectedFilterStatus != null ? x.Status_guid == SelectedFilterStatus.GID : x.Status_guid.ToString().Contains(""))
-                    & (SelectedFilterInventory != null ? x.InventoryNumber.Inventory.Contains(SelectedFilterInventory) : x.InventoryNumber.Inventory.Contains(""))
-                    & (SelectedFilterType != null ? x.Type_eq_guid == SelectedFilterType.GID : x.Type_eq_guid.ToString().Contains(""))
-                    & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.InventoryNumber.Inventory.Contains(""))
-                    );
-
-                AllPage = Convert.ToInt32(Math.Round(i.ToList().Count() / 25d, MidpointRounding.ToPositiveInfinity));
-
-                i.Skip((CurrentPage - 1) * 25).
-                Take(25);
-                using (EntityContext entCont = new EntityContext())
+                using (EqContext ec = new EqContext())
                 {
+                    var i = ec.Komplekt.
+                        Include(x => x.Account).
+                        Include(x => x.Status).
+                        Include(x => x.Type_Eq).
+                        Where
+                        (x =>
+                        (string.IsNullOrEmpty(FilterName) ? x.Account.Acc_user.Contains("") : x.Account.Acc_user.Contains(FilterName))
+                        & (SelectedFilterStatus != null ? x.Status_guid == SelectedFilterStatus.GID : x.Status_guid.ToString().Contains(""))
+                        & (SelectedFilterInventory != null ? x.InventoryNumber.Inventory.ToString().Contains(SelectedFilterInventory) : x.InventoryNumber.Inventory.ToString().Contains(""))
+                        & (SelectedFilterType != null ? x.Type_eq_guid == SelectedFilterType.GID : x.Type_eq_guid.ToString().Contains(""))
+                        & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.InventoryNumber.Inventory.ToString().Contains(""))
+                        ).ToList();
                     foreach (var item in i)
                     {
-                        item.Otdelenie = entCont.Otdelenie.FirstOrDefault(x => x.GID == item.Otdelenie_gid);
+                        item.InventoryNumber = entcon.InventoryNumbers.FirstOrDefault(x => x.Id == item.Inventory_id);
+                        item.Otdelenie = entcon.Otdelenie.FirstOrDefault(x => x.GID == item.Otdelenie_gid);
                     }
+
+                    AllPage = Convert.ToInt32(Math.Ceiling(i.Count() / 25d));
+
+                    i.Skip((CurrentPage - 1) * 25).
+                    Take(25);
+                    using (EntityContext entCont = new EntityContext())
+                    {
+                        foreach (var item in i)
+                        {
+                            item.Otdelenie = entCont.Otdelenie.FirstOrDefault(x => x.GID == item.Otdelenie_gid);
+                        }
+                    }
+                    KomplektTable = new ObservableCollection<Komplekt_M>(i);
+                    NewItem.Status = null;
+                    NewItem.Otdelenie = null;
                 }
-                KomplektTable = new ObservableCollection<Komplekt_M>(i.Include(x => x.Status).Include(x => x.Type_Eq).OrderBy(x => x.GID));
-                NewItem.Status = null;
-                NewItem.Otdelenie = null;
             }
+           
         }
         #endregion
 
@@ -127,7 +132,13 @@ namespace Equipment.VM
         #endregion
 
         #region Добавление комплекта
-        Komplekt_M newItem;
+        Komplekt_M newItem = new Komplekt_M
+        {
+            Account = new Account_M(),
+            InventoryNumber = new InventoryNumber_M()
+
+        };
+
         public Komplekt_M NewItem //Новый комплект 
         {
             get => newItem;
@@ -143,8 +154,7 @@ namespace Equipment.VM
         {
             get
             {
-                return addItem ??
-                    (addItem = new RelayCommand(o =>
+                return addItem ??= new RelayCommand(o =>
                     {
                         using (EqContext ec = new EqContext())
                         {
@@ -174,8 +184,8 @@ namespace Equipment.VM
                                     GetStartData();
                                     NewItem = new Komplekt_M
                                     {
-                                        Account = new Account_M()
-
+                                        Account = new Account_M(),
+                                        InventoryNumber = new InventoryNumber_M()
                                     };
                                 }
                                 else
@@ -184,14 +194,15 @@ namespace Equipment.VM
                                 }
                             };
                         }
-                    }, o =>
+                    }
+                    , o =>
                     NewItem.Status != null
                     & NewItem.Account.Acc_user != null
                     & NewItem.Account.Password != null
-                    & NewItem.InventoryNumber.Inventory != null
+                    & NewItem.InventoryNumber.Inventory != ""
                     & NewItem.Type_Eq != null
                     & NewItem.Otdelenie != null
-                    ));
+                    );
             }
         }
 
