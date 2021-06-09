@@ -28,7 +28,7 @@ namespace Equipment.VM
         {
             using (EqContext ec = new EqContext())
             {
-               
+
                 CurrentPage = 1;
                 GetEndKomplekt();
                 Statuses = new ObservableCollection<Status_M>(ec.Status.ToList());
@@ -38,12 +38,11 @@ namespace Equipment.VM
                     Otdelenies = new ObservableCollection<Otdelenie_M>(EntCont.Otdelenie.ToList());
                 }
             }
-            //await Task.CompletedTask;
         }
 
         public void GetEndKomplekt()
         {
-            using(EntityContext entcon = new EntityContext())
+            using (EntityContext entcon = new EntityContext())
             {
                 using (EqContext ec = new EqContext())
                 {
@@ -51,17 +50,18 @@ namespace Equipment.VM
                         Include(x => x.Account).
                         Include(x => x.Status).
                         Include(x => x.Type_Eq).
+                        Include(x => x.Inventory).
                         Where
                         (x =>
                         (string.IsNullOrEmpty(FilterName) ? x.Account.Acc_user.Contains("") : x.Account.Acc_user.Contains(FilterName))
                         & (SelectedFilterStatus != null ? x.Status_guid == SelectedFilterStatus.GID : x.Status_guid.ToString().Contains(""))
-                        & (SelectedFilterInventory != null ? x.InventoryNumber.Inventory.ToString().Contains(SelectedFilterInventory) : x.InventoryNumber.Inventory.ToString().Contains(""))
+                        & (SelectedFilterInventory != null ? x.Inventory.Inventory.Contains(SelectedFilterInventory) : x.Inventory.Inventory.Contains(""))
                         & (SelectedFilterType != null ? x.Type_eq_guid == SelectedFilterType.GID : x.Type_eq_guid.ToString().Contains(""))
-                        & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.InventoryNumber.Inventory.ToString().Contains(""))
+                        & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.Inventory.Inventory.Contains(""))
                         ).ToList();
                     foreach (var item in i)
                     {
-                        item.InventoryNumber = entcon.InventoryNumbers.FirstOrDefault(x => x.Id == item.Inventory_id);
+                        item.InventoryNumber = entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == item.Inventory.Inventory);
                         item.Otdelenie = entcon.Otdelenie.FirstOrDefault(x => x.GID == item.Otdelenie_gid);
                     }
 
@@ -81,8 +81,20 @@ namespace Equipment.VM
                     NewItem.Otdelenie = null;
                 }
             }
-           
         }
+
+        RelayCommand refreshData;
+        public RelayCommand RefreshData
+        {
+            get
+            {
+                return refreshData ??= new RelayCommand(o =>
+                {
+                    GetStartData();
+                });
+            }
+        }
+
         #endregion
 
         #region Списки и таблицы
@@ -135,7 +147,7 @@ namespace Equipment.VM
         Komplekt_M newItem = new Komplekt_M
         {
             Account = new Account_M(),
-            InventoryNumber = new InventoryNumber_M()
+            Inventory = new Inventory_m()
 
         };
 
@@ -161,18 +173,24 @@ namespace Equipment.VM
                             using (EntityContext entcon = new EntityContext())
                             {
 
-                                if (entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == NewItem.InventoryNumber.Inventory) == null)
+                                if (entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == NewItem.Inventory.Inventory) == null)
                                 {
-                                    InventoryNumber_M NewInventory = new InventoryNumber_M();
-                                    NewInventory.Inventory = NewItem.InventoryNumber.Inventory;
+                                    InventoryNumber_M NewInventory = new InventoryNumber_M
+                                    {
+                                        Inventory = NewItem.Inventory.Inventory,
+                                        OtdelenieGID = NewItem.Otdelenie_gid
+                                    };
                                     entcon.InventoryNumbers.Update(NewInventory);
                                     entcon.SaveChanges();
-                                    NewItem.Inventory_id = entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == NewItem.InventoryNumber.Inventory).Id;
+
+                                    NewItem.Inventory.Otdelenie_guid = NewItem.Otdelenie_gid;
+                                    ec.Inventory.Update(NewItem.Inventory);
                                     ec.Account.Update(NewItem.Account);
                                     ec.Type_equipment.Update(NewItem.Type_Eq);
                                     ec.Status.Update(NewItem.Status);
                                     ec.SaveChanges();
 
+                                    NewItem.Inventory_id = NewItem.Inventory.Id;
                                     NewItem.Account_id = ec.Account.FirstOrDefault(x => x.Acc_user == NewItem.Account.Acc_user
                                         && x.Password == NewItem.Account.Password).Id;
                                     NewItem.Status_guid = NewItem.Status.GID;
@@ -185,7 +203,7 @@ namespace Equipment.VM
                                     NewItem = new Komplekt_M
                                     {
                                         Account = new Account_M(),
-                                        InventoryNumber = new InventoryNumber_M()
+                                        Inventory = new Inventory_m()
                                     };
                                 }
                                 else
@@ -199,7 +217,7 @@ namespace Equipment.VM
                     NewItem.Status != null
                     & NewItem.Account.Acc_user != null
                     & NewItem.Account.Password != null
-                    & NewItem.InventoryNumber.Inventory != ""
+                    & NewItem.Inventory.Inventory != ""
                     & NewItem.Type_Eq != null
                     & NewItem.Otdelenie != null
                     );
@@ -220,8 +238,6 @@ namespace Equipment.VM
             }
         }
 
-
-
         RelayCommand saveSelectedItem;
         public RelayCommand SaveSelectedItem //Сохранение данных в выбранной строке
         {
@@ -231,7 +247,7 @@ namespace Equipment.VM
                 {
                     using (EntityContext entcont = new EntityContext())
                     {
-                        if (entcont.InventoryNumbers.FirstOrDefault(x => x.Id == SelectedItem.InventoryNumber.Id).Inventory == SelectedItem.InventoryNumber.Inventory || entcont.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedItem.InventoryNumber.Inventory) != null)
+                        if (SelectedItem.InventoryNumber.Inventory == SelectedItem.Inventory.Inventory || entcont.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedItem.Inventory.Inventory) == null)
                         {
                             using (EqContext ec = new EqContext())
                             {
@@ -241,20 +257,27 @@ namespace Equipment.VM
                                     SelectedItem.Status_guid = NewStatus.GID;
                                 if (NewType != null)
                                     SelectedItem.Type_eq_guid = NewType.GID;
-                                entcont.InventoryNumbers.Update(SelectedItem.InventoryNumber);
-                                ec.Account.Update(SelectedItem.Account);
-                                ec.Komplekt.UpdateRange(KomplektTable);
 
-                                if (NewType != null)                         //Вот это кусок кода - костыль, я не знаю почему, но после назнчения
-                                                                             //selcteditem новый тип id и статус id они снова сбрасываются
-                                    SelectedItem.Type_eq_guid = NewType.GID;  // до исходных значения после updateRange.
-                                if (NewStatus != null)
+                                SelectedItem.InventoryNumber.Inventory = SelectedItem.Inventory.Inventory;
+                                entcont.InventoryNumbers.Update(SelectedItem.InventoryNumber);
+
+                                ec.Account.Update(SelectedItem.Account);
+                                ec.Komplekt.Update(SelectedItem);
+
+                                if (NewType != null) //костыль
+                                    SelectedItem.Type_eq_guid = NewType.GID; 
+                                if (NewStatus != null) //костыль
                                     SelectedItem.Status_guid = NewStatus.GID;
+
                                 entcont.SaveChanges();
                                 ec.SaveChanges();
                                 GetEndKomplekt();
 
                             }
+                        }
+                        else
+                        {
+                            ErrorInventory();
                         }
                     }
                         
@@ -320,9 +343,38 @@ namespace Equipment.VM
                 return changeMonitorKomplekt ??= new RelayCommand(o =>
                 {
                     Monitor_Komplekt_V monitorKomplekt = new Monitor_Komplekt_V();
-                    (monitorKomplekt.DataContext as Monitor_Komplekt_VM).GetData();
-                    (monitorKomplekt.DataContext as Monitor_Komplekt_VM).GetMonitorKomplekt(SelectedItem.GID);
+                    //(monitorKomplekt.DataContext as Monitor_VM).GetData();
+                    //(monitorKomplekt.DataContext as Monitor_VM).GetMonitorKomplekt(SelectedItem.GID);
                     monitorKomplekt.ShowDialog();
+                }, o => SelectedItem != null);
+            }
+        }
+
+        #endregion
+
+        #region Удаление комплекта
+
+        RelayCommand deleteItem;
+        public RelayCommand DeleteItem
+        {
+            get
+            {
+                return deleteItem ??= new RelayCommand(o =>
+                {
+                    using (EqContext ec = new EqContext())
+                    {
+                        using (EntityContext entcont = new EntityContext())
+                        {
+                            InventoryNumber_M inventoryForDelete = entcont.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedItem.Inventory.Inventory);
+                            entcont.InventoryNumbers.Remove(inventoryForDelete);
+                            entcont.SaveChanges();
+                        }
+                        ec.SaveChanges();
+                        ec.Account.Remove(SelectedItem.Account);
+                        ec.Komplekt.Remove(SelectedItem);
+                        ec.SaveChanges();
+                        GetStartData();
+                    }
                 }, o => SelectedItem != null);
             }
         }
@@ -480,38 +532,7 @@ namespace Equipment.VM
 
         #endregion
 
-      
-        RelayCommand deleteItem; //Удаление комплекта
-        public RelayCommand DeleteItem
-        {
-            get
-            {
-                return deleteItem ??= new RelayCommand(o =>
-                {
-                    using (EqContext ec = new EqContext())
-                    {
-                        ec.SaveChanges();
-                        ec.Account.Remove(SelectedItem.Account);
-                        ec.Komplekt.Remove(SelectedItem);
-                        ec.SaveChanges();
-                        GetStartData();
-                    }
-                }, o => SelectedItem != null);
-            }
-        }
-
-        RelayCommand refreshData;
-        public RelayCommand RefreshData
-        {
-            get
-            {
-                return refreshData ??= new RelayCommand(o =>
-                {
-                    GetStartData();
-                });
-            }
-        }
-
+        
         public void ErrorInventory()
         {
             MessageBox.Show("Такой инвентарный номер уже существует","ErrorInventory", MessageBoxButton.OK, MessageBoxImage.Error);

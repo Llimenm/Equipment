@@ -29,14 +29,6 @@
                         <GridViewColumn Width="auto">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding id}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                            <TextBlock Text="Id" FontSize="18"/>
-                        </GridViewColumn>
-                        <GridViewColumn Width="auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
                                     <TextBlock Text="{Binding Type_name}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

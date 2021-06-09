@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Equipment.V
+namespace Equipment.V.Monitor
 {
     /// <summary>
     /// Логика взаимодействия для Monitor_V.xaml

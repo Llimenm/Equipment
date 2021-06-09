@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Equipment.VM
 {
@@ -102,12 +103,24 @@ namespace Equipment.VM
             {
                 return deleteItem ??= new RelayCommand(o =>
                 {
-                    using (EqContext ec = new EqContext())
+                    try
                     {
-                        ec.Ram_type.Remove(SelectedItem);
-                        ec.SaveChanges();
-                        GetData();
+                        using (EqContext ec = new EqContext())
+                        {
+                            ec.Ram_type.Remove(SelectedItem);
+                            ec.SaveChanges();
+                            GetData();
+                        }
                     }
+                    catch 
+                    {
+                        
+                    }
+                    finally
+                    {
+                        MessageBox.Show("Есть записи в другой таблице с данным типом памяти", "Невозможно удлаить запись", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    
                 }, o => SelectedItem != null
                 );
             }

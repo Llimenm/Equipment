@@ -3,14 +3,16 @@ using System;
 using Equipment.M.EquipmentContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Equipment.Migrations
 {
     [DbContext(typeof(EqContext))]
-    partial class EqContextModelSnapshot : ModelSnapshot
+    [Migration("20210608084937_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,11 +194,11 @@ namespace Equipment.Migrations
                     b.ToTable("Motherboards");
                 });
 
-            modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Monitor_M", b =>
+            modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Monitor_Komplekt_M", b =>
                 {
-                    b.Property<Guid>("GID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("int");
 
                     b.Property<int>("Inventory_id")
                         .HasColumnType("int");
@@ -204,11 +206,8 @@ namespace Equipment.Migrations
                     b.Property<Guid?>("Komplekt_guid")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Model")
-                        .HasColumnType("longtext");
+                    b.Property<Guid?>("Monitor_guid")
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid?>("Otdelenie_guid")
                         .HasColumnType("char(36)");
@@ -219,18 +218,36 @@ namespace Equipment.Migrations
                     b.Property<Guid?>("Status_guid")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TypeEq_guid")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("GID");
-
-                    b.HasIndex("Inventory_id");
+                    b.HasKey("Id");
 
                     b.HasIndex("Komplekt_guid");
 
+                    b.HasIndex("Monitor_guid");
+
                     b.HasIndex("Status_guid");
 
-                    b.HasIndex("TypeEq_guid");
+                    b.ToTable("Monitor_komplekt");
+                });
+
+            modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Monitor_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Manufacturer")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Ports_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("GID");
 
                     b.ToTable("Monitor");
                 });
@@ -408,33 +425,25 @@ namespace Equipment.Migrations
                     b.Navigation("Type_equipment");
                 });
 
-            modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Monitor_M", b =>
+            modelBuilder.Entity("Equipment.M.EquipmentContext.Models.Monitor_Komplekt_M", b =>
                 {
-                    b.HasOne("Equipment.M.EquipmentContext.Models.Inventory_m", "Inventory")
-                        .WithMany()
-                        .HasForeignKey("Inventory_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Equipment.M.EquipmentContext.Models.Komplekt_M", "Komplekt")
                         .WithMany()
                         .HasForeignKey("Komplekt_guid");
+
+                    b.HasOne("Equipment.M.EquipmentContext.Models.Monitor_M", "Monitor")
+                        .WithMany()
+                        .HasForeignKey("Monitor_guid");
 
                     b.HasOne("Equipment.M.EquipmentContext.Models.Status_M", "Status")
                         .WithMany()
                         .HasForeignKey("Status_guid");
 
-                    b.HasOne("Equipment.M.EquipmentContext.Models.Type_eq_M", "TypeEquipment")
-                        .WithMany()
-                        .HasForeignKey("TypeEq_guid");
-
-                    b.Navigation("Inventory");
-
                     b.Navigation("Komplekt");
 
-                    b.Navigation("Status");
+                    b.Navigation("Monitor");
 
-                    b.Navigation("TypeEquipment");
+                    b.Navigation("Status");
                 });
 #pragma warning restore 612, 618
         }

@@ -25,7 +25,7 @@ namespace Equipment.M
         static Dictionary<string, string> db_con_list = new Dictionary<string, string>()
         {
             ["app"] = "Eq_test",
-            ["main"] = "entityTest1"
+            ["main"] = "entity_test2"
         };
 
         public static string ConString(ServerType serverType, DbType appType)

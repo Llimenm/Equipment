@@ -97,6 +97,9 @@ namespace Equipment.M.EquipmentContext.Models
         [NotMapped]
         public Otdelenie_M Otdelenie { get; set; }
 
+        [ForeignKey("Inventory_id")]
+        public Inventory_m Inventory { get; set; }
+
         [NotMapped]
         public InventoryNumber_M InventoryNumber { get; set; }
 

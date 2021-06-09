@@ -22,6 +22,18 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateMesto(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер мест Отделений
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateAddress(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер адресов
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
         <member name="M:OKB3Admin.Connection.MainAppContext.CreateInventorization(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             билдер  инвенртаризации
@@ -61,6 +73,18 @@
         <member name="M:OKB3Admin.Connection.MainAppContext.CreateERRaport(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             билдер жлектронных рапортов
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateRequest(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер жлектронных рапортов
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:OKB3Admin.Connection.MainAppContext.CreateNewsPost(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            билдер новостей
             </summary>
             <param name="modelBuilder"></param>
         </member>
@@ -728,7 +752,7 @@
             индекс подкатегории
             </summary>
         </member>
-        <member name="P:OKB3Admin.M.RequestServis.RequestSubCategory_M.ModuleIndex">
+        <member name="P:OKB3Admin.M.RequestServis.RequestSubCategory_M.ModuleName">
             <summary>
             ИМЯ модуля к которому принадлежит категория и подкатегория
             </summary>
@@ -750,12 +774,22 @@
         </member>
         <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.UserGID">
             <summary>
-            GUID юзера работника
+            GUID админского юзера работника
             </summary>
         </member>
         <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.User">
             <summary>
             ссылка на пользователя
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.UserWebGID">
+            <summary>
+            GUID веб юзера работника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.WebUser">
+            <summary>
+            ссылка на веб пользователя
             </summary>
         </member>
         <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.OtdelenieGID">
@@ -768,9 +802,69 @@
             Ссылка на отделение работника
             </summary>
         </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.PostStafGID">
+            <summary>
+            GUID должности работника
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Staf.Sotrudnik_M.StafPost">
+            <summary>
+            ссылка на должность
+            </summary>
+        </member>
         <member name="F:OKB3Admin.M.Structura.Korpus_M.name">
             <summary>
             Название корпуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Korpus_M.PodrazdelenieGID">
+            <summary>
+            GUID подразделения корпуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Korpus_M.Podrazdelenie">
+            <summary>
+            ссылка на подразделение корпуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Korpus_M.Mesto">
+            <summary>
+            место расположения корпуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Korpus_M.OtdelenieCollection">
+            <summary>
+            список отделений корпуса
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Otdelenie_M.Number">
+            <summary>
+            номер отделения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Otdelenie_M.Name">
+            <summary>
+            название отделения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Otdelenie_M.KorpusGID">
+            <summary>
+            GUID корпуса отделения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Otdelenie_M.Korpus">
+            <summary>
+            ссылка на корпус отеделния
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Otdelenie_M.InventaryNumberCollection">
+            <summary>
+            список всех инвентарных номеров отделения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Otdelenie_M.SotrudnikCollection">
+            <summary>
+            список все хсотрудников
             </summary>
         </member>
         <member name="F:OKB3Admin.M.Structura.Podrazdelenie_M.main_name">
@@ -781,6 +875,11 @@
         <member name="F:OKB3Admin.M.Structura.Podrazdelenie_M.psevdonim">
             <summary>
             Всевдоним подразделения
+            </summary>
+        </member>
+        <member name="P:OKB3Admin.M.Structura.Podrazdelenie_M.Mesto">
+            <summary>
+            место расположения подразделения
             </summary>
         </member>
         <member name="P:OKB3Admin.M.Svodka.SvodkaEntryData.FreeBedCount">

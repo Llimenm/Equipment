@@ -22,6 +22,8 @@ namespace Equipment.M
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
         }
     }
 }

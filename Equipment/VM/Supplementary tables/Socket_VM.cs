@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Equipment.M.EquipmentContext;
 using Equipment.M.EquipmentContext.Models;
 using Equipment_accounting.Data;
@@ -102,11 +103,22 @@ namespace Equipment.VM
             {
                 return deleteItem ??= new RelayCommand(o =>
                 {
-                    using (EqContext ec = new EqContext())
+                    try
                     {
-                        ec.Socket.Remove(SelectedItem);
-                        ec.SaveChanges();
-                        GetData();
+                        using (EqContext ec = new EqContext())
+                        {
+                            ec.Socket.Remove(SelectedItem);
+                            ec.SaveChanges();
+                            GetData();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+                        MessageBox.Show("Есть записи в другой таблице с данным сокетом", "Невозможно удлаить запись", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }, o => SelectedItem != null
                 );

@@ -4,51 +4,42 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Equipment"
-    xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.MainWindow"
+    xmlns:VM="clr-namespace:Equipment.VM" x:Name="window" x:Class="Equipment.MainWindow"
     mc:Ignorable="d"
-    Title="Учет оборудования" 
-    Height="750" 
-    Width="1300"
+    Title="Учет оборудования"
     MinHeight="750"
-    MinWidth="1300"
+    MinWidth="950"
     WindowStartupLocation="CenterScreen"
     Icon="/pc.png">
     <Window.DataContext>
         <VM:MainWindow_VM/>
     </Window.DataContext>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TreeView Grid.Row="1" Grid.Column="0" >
-            <!-- Лист таблиц -->
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <TextBlock Text="Комплекты"/>
-                </TreeViewItem.Header>
-                <TreeViewItem Header="Таблица комплектов" IsSelected="{Binding KomplectIsSelect}"/>
+        <Frame Grid.Column="1" Content ="{Binding FrameForPage}" HorizontalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        <Expander IsExpanded="{Binding IsExpand}" Margin="0,5,0,0" Background="#FF7BACD6" Foreground="White" FontWeight="Bold" ExpandDirection="Right" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <TreeView Width="260" Grid.Column="0" FontSize="14" Foreground="White" Background="#FF7BACD6" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" Height="{Binding ActualHeight, ElementName=window, Mode=OneWay}">
+                <TreeView.Resources>
+                    <Style TargetType="TreeViewItem" >
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                </TreeView.Resources>
+                <TreeViewItem Header="Комплекты и стац.оборудование" IsSelected="{Binding KomplectIsSelect}"/>
+                <TreeViewItem Header="Таблица мониторов" IsSelected="{Binding MonitorIsSelected}"/>
                 <TreeViewItem>
                     <TreeViewItem.Header>
-                        <TextBlock Text="Вспомогательные компоненты"/>
+                        <TextBlock Text="Вспомогательные таблицы"/>
                     </TreeViewItem.Header>
                     <TreeViewItem Header="Учетные записи" IsSelected="{Binding AccountIsSelected}"/>
                     <TreeViewItem Header="Статусы" IsSelected="{Binding StatusIsSelected}"/>
                     <TreeViewItem Header="Типы оборудования" IsSelected="{Binding TypeEqIsSelected}"/>
-                    <TreeViewItem Header="Сокеты" IsSelected="{Binding SocketIsSelectd}"/>
+                    <!--<TreeViewItem Header="Сокеты" IsSelected="{Binding SocketIsSelectd}"/>
                     <TreeViewItem Header="Чипсеты" IsSelected="{Binding ChipsetIsSelected}"/>
-                    <TreeViewItem Header="Типы памяти" IsSelected="{Binding RamTypeIsSelected}"/>
+                    <TreeViewItem Header="Типы памяти" IsSelected="{Binding RamTypeIsSelected}"/>-->
                 </TreeViewItem>
-                <TreeViewItem Header="Комплектующие">
+                <!--<TreeViewItem Header="Комплектующие">
                     <TreeViewItem Header="Материнские платы" IsSelected="{Binding MbSelected}"/>
-                    <TreeViewItem Header="Мониторы" IsSelected="{Binding MonitorIsSelected}"/>
-                </TreeViewItem>
-            </TreeViewItem>
-        </TreeView>
-        <Frame Grid.Row="1" Grid.Column="1" Content ="{Binding FrameForPage}" HorizontalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+                </TreeViewItem>-->
+            </TreeView>
+        </Expander>
     </Grid>
 </Window>

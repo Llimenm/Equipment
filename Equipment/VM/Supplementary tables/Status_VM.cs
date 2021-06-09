@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Equipment.M.EquipmentContext;
 using Equipment.M.EquipmentContext.Models;
 using Equipment_accounting.Data;
@@ -102,12 +103,21 @@ namespace Equipment.VM
             {
                 return deleteItem ??= new RelayCommand(o =>
                 {
-                    using (EqContext ec = new EqContext())
+                    try
                     {
-                        ec.Status.Remove(SelectedItem);
-                        ec.SaveChanges();
-                        GetData();
+                        using (EqContext ec = new EqContext())
+                        {
+                            ec.Status.Remove(SelectedItem);
+                            ec.SaveChanges();
+                            GetData();
+                        }
                     }
+                    catch{ }
+                    finally
+                    {
+                        MessageBox.Show("Есть записи в другой таблице с данным статусом", "Невозможно удалить запись!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    
                 }, o => SelectedItem != null
                 );
             } 

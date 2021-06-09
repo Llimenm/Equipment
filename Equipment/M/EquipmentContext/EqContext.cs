@@ -21,10 +21,11 @@ namespace Equipment.M.EquipmentContext
         public DbSet<Status_M> Status { get; set; }
         public DbSet<Type_eq_M> Type_equipment { get; set; }
         public DbSet<Monitor_M> Monitor { get; set; }
-        public DbSet<Monitor_Komplekt_M> Monitor_komplekt { get; set; }
-
         public DbSet<Chipset_M> Chipset { get; set; }
         public DbSet<Socket_M> Socket { get; set; }
+        public DbSet<Inventory_m> Inventory { get; set; }
+
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,8 +47,6 @@ namespace Equipment.M.EquipmentContext
 
             modelBuilder.Entity<Monitor_M>().HasKey(x => x.GID);
 
-            modelBuilder.Entity<Monitor_Komplekt_M>().HasKey(x => x.Id);
-
             modelBuilder.Entity<Ports_M>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Ram_type_M>().HasKey(x => x.GID);
@@ -55,6 +54,8 @@ namespace Equipment.M.EquipmentContext
             modelBuilder.Entity<Status_M>().HasKey(x => x.GID);
 
             modelBuilder.Entity<Type_eq_M>().HasKey(x => x.GID);
+
+            modelBuilder.Entity<Inventory_m>().HasKey(x => x.Id);
         }
     }
 }

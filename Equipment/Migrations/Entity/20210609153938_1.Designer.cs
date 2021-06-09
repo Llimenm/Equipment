@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Equipment.Migrations.Entity
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20210606125531_1")]
+    [Migration("20210609153938_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,19 +74,10 @@ namespace Equipment.Migrations.Entity
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Blok")
-                        .HasColumnType("longtext");
-
                     b.Property<Guid?>("ContactGID")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Etag")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Kabel")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Kabinet")
                         .HasColumnType("longtext");
 
                     b.Property<string>("MacAdress")
@@ -94,6 +85,9 @@ namespace Equipment.Migrations.Entity
 
                     b.Property<string>("Magistral")
                         .HasColumnType("longtext");
+
+                    b.Property<Guid?>("MestoGID")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("OborudovanieName")
                         .HasColumnType("longtext");
@@ -124,6 +118,29 @@ namespace Equipment.Migrations.Entity
                     b.ToTable("Telefons");
                 });
 
+            modelBuilder.Entity("OKB3Admin.M.Agents.Address_m", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Dom")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Gorod")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PostIndex")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Ulica")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("GID");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("OKB3Admin.M.InventorySystem.InventoryNumber_M", b =>
                 {
                     b.Property<int>("Id")
@@ -139,8 +156,6 @@ namespace Equipment.Migrations.Entity
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Inventory");
-
                     b.HasIndex("Id")
                         .IsUnique();
 
@@ -150,6 +165,47 @@ namespace Equipment.Migrations.Entity
                     b.HasIndex("OtdelenieGID");
 
                     b.ToTable("InventoryNumbers");
+                });
+
+            modelBuilder.Entity("OKB3Admin.M.News.NewsPost_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("CanPost")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("date");
+
+                    b.Property<byte[]>("File")
+                        .HasColumnType("longblob");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("HaveMainText")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<byte[]>("Img")
+                        .HasColumnType("longblob");
+
+                    b.Property<string>("MainText")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ShortText")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("GID");
+
+                    b.HasIndex("GID")
+                        .IsUnique();
+
+                    b.ToTable("NewsPosts");
                 });
 
             modelBuilder.Entity("OKB3Admin.M.Printers.Cartridge", b =>
@@ -175,8 +231,6 @@ namespace Equipment.Migrations.Entity
                         .HasColumnType("int");
 
                     b.HasKey("GuId");
-
-                    b.HasAlternateKey("AsuId");
 
                     b.HasIndex("AsuId")
                         .IsUnique();
@@ -380,6 +434,9 @@ namespace Equipment.Migrations.Entity
                     b.Property<string>("HardwareName")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("InventoryDataId")
+                        .HasColumnType("int");
+
                     b.Property<string>("InventoryNumber")
                         .IsRequired()
                         .HasColumnType("varchar(95)");
@@ -397,6 +454,8 @@ namespace Equipment.Migrations.Entity
                         .HasColumnType("int");
 
                     b.HasKey("Guid");
+
+                    b.HasIndex("InventoryDataId");
 
                     b.HasIndex("ModelGuid");
 
@@ -631,13 +690,140 @@ namespace Equipment.Migrations.Entity
                     b.ToTable("ER_Raport_Shablons");
                 });
 
-            modelBuilder.Entity("OKB3Admin.M.Staf.Sotrudnik_M", b =>
+            modelBuilder.Entity("OKB3Admin.M.RequestServis.RequestCategory_M", b =>
                 {
                     b.Property<Guid>("GID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("ContactPersonPostGID")
+                    b.Property<bool>("Enable")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Index")
+                        .IsRequired()
+                        .HasColumnType("varchar(95)");
+
+                    b.Property<string>("NameCategory")
+                        .IsRequired()
+                        .HasColumnType("varchar(95)");
+
+                    b.HasKey("GID");
+
+                    b.HasIndex("GID")
+                        .IsUnique();
+
+                    b.HasIndex("Index")
+                        .IsUnique();
+
+                    b.HasIndex("NameCategory")
+                        .IsUnique();
+
+                    b.ToTable("RequestCategories");
+                });
+
+            modelBuilder.Entity("OKB3Admin.M.RequestServis.RequestSubCategory_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryGID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("Enable")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ModuleName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameSubCategory")
+                        .IsRequired()
+                        .HasColumnType("varchar(95)");
+
+                    b.Property<string>("SubIndex")
+                        .IsRequired()
+                        .HasColumnType("varchar(95)");
+
+                    b.HasKey("GID");
+
+                    b.HasIndex("GID")
+                        .IsUnique();
+
+                    b.HasIndex("NameSubCategory")
+                        .IsUnique();
+
+                    b.HasIndex("SubIndex")
+                        .IsUnique();
+
+                    b.ToTable("RequestSubCategories");
+                });
+
+            modelBuilder.Entity("OKB3Admin.M.RequestServis.Request_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("AddTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ChangeStatusTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ContactNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("InfoZayavka")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ModuleName")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("OtdelenieGID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("RequestCategoryGID")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RequestCategoryName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RequestSubCategoryGID")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RequestSubCategoryName")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("ServisUserGID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("StatusComent")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("curIniciativeType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("curStatus")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("file")
+                        .HasColumnType("longblob");
+
+                    b.Property<string>("file_name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("GID");
+
+                    b.HasIndex("GID")
+                        .IsUnique();
+
+                    b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("OKB3Admin.M.Staf.Sotrudnik_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("MainTabelNumber")
@@ -653,6 +839,9 @@ namespace Equipment.Migrations.Entity
                     b.Property<string>("Patron")
                         .HasColumnType("longtext");
 
+                    b.Property<Guid?>("PostStafGID")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Snils")
                         .IsRequired()
                         .HasColumnType("varchar(95)");
@@ -663,6 +852,9 @@ namespace Equipment.Migrations.Entity
                     b.Property<Guid?>("UserGID")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("UserWebGID")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("GID");
 
                     b.HasIndex("MainTabelNumber")
@@ -671,9 +863,6 @@ namespace Equipment.Migrations.Entity
                     b.HasIndex("OtdelenieGID");
 
                     b.HasIndex("Snils")
-                        .IsUnique();
-
-                    b.HasIndex("UserGID")
                         .IsUnique();
 
                     b.ToTable("Sotrudniks");
@@ -692,6 +881,24 @@ namespace Equipment.Migrations.Entity
                         });
                 });
 
+            modelBuilder.Entity("OKB3Admin.M.Staf.StafPost_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NamePost")
+                        .IsRequired()
+                        .HasColumnType("varchar(95)");
+
+                    b.HasKey("GID");
+
+                    b.HasIndex("NamePost")
+                        .IsUnique();
+
+                    b.ToTable("StafPosts");
+                });
+
             modelBuilder.Entity("OKB3Admin.M.Structura.Korpus_M", b =>
                 {
                     b.Property<Guid>("GID")
@@ -703,6 +910,9 @@ namespace Equipment.Migrations.Entity
                         .HasColumnType("varchar(95)");
 
                     b.Property<Guid?>("PodrazdelenieGID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("mestoGID")
                         .HasColumnType("char(36)");
 
                     b.HasKey("GID");
@@ -718,7 +928,7 @@ namespace Equipment.Migrations.Entity
                     b.ToTable("Korpus");
                 });
 
-            modelBuilder.Entity("OKB3Admin.M.Structura.Otdelenie_M", b =>
+            modelBuilder.Entity("OKB3Admin.M.Structura.Mesto_M", b =>
                 {
                     b.Property<Guid>("GID")
                         .ValueGeneratedOnAdd()
@@ -727,11 +937,34 @@ namespace Equipment.Migrations.Entity
                     b.Property<string>("Blok")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Coment")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Etag")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Kabinet")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameMesto")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Open")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid?>("OtdelenieGID")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("GID");
+
+                    b.ToTable("Mesto");
+                });
+
+            modelBuilder.Entity("OKB3Admin.M.Structura.Otdelenie_M", b =>
+                {
+                    b.Property<Guid>("GID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<Guid?>("KorpusGID")
                         .HasColumnType("char(36)");
@@ -745,8 +978,6 @@ namespace Equipment.Migrations.Entity
                         .HasColumnType("varchar(95)");
 
                     b.HasKey("GID");
-
-                    b.HasAlternateKey("Number");
 
                     b.HasIndex("GID")
                         .IsUnique();
@@ -762,6 +993,7 @@ namespace Equipment.Migrations.Entity
                         new
                         {
                             GID = new Guid("a92f0cb6-bbc2-4001-9894-c7c7099580c7"),
+                            IsOpen = false,
                             Name = "Отделение",
                             Number = "01"
                         });
@@ -780,6 +1012,9 @@ namespace Equipment.Migrations.Entity
                     b.Property<string>("Psevdonim")
                         .IsRequired()
                         .HasColumnType("varchar(95)");
+
+                    b.Property<Guid?>("mestoGID")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("GID");
 
@@ -881,8 +1116,6 @@ namespace Equipment.Migrations.Entity
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("ApplicationName");
-
                     b.HasIndex("ApplicationName")
                         .IsUnique();
 
@@ -947,18 +1180,27 @@ namespace Equipment.Migrations.Entity
                             CurVersion = "21.05.2021",
                             Enable = true,
                             Index = "a_request"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ApplicationName = "OKBPrinters",
+                            CurVersion = "21.05.2021",
+                            Enable = true,
+                            Index = "a_printers"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ApplicationName = "OKB_Web_News",
+                            CurVersion = "21.05.2021",
+                            Enable = true,
+                            Index = "w_news"
                         });
                 });
 
             modelBuilder.Entity("OKB3Admin.M.InventorySystem.InventoryNumber_M", b =>
                 {
-                    b.HasOne("OKB3Admin.M.Printers.Printer", null)
-                        .WithOne("InventoryData")
-                        .HasForeignKey("OKB3Admin.M.InventorySystem.InventoryNumber_M", "Inventory")
-                        .HasPrincipalKey("OKB3Admin.M.Printers.Printer", "InventoryNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("OKB3Admin.M.Structura.Otdelenie_M", "Otdelenie")
                         .WithMany("InventaryNumberCollection")
                         .HasForeignKey("OtdelenieGID")
@@ -1046,6 +1288,10 @@ namespace Equipment.Migrations.Entity
 
             modelBuilder.Entity("OKB3Admin.M.Printers.Printer", b =>
                 {
+                    b.HasOne("OKB3Admin.M.InventorySystem.InventoryNumber_M", "InventoryData")
+                        .WithMany()
+                        .HasForeignKey("InventoryDataId");
+
                     b.HasOne("OKB3Admin.M.Printers.Printer_Model", "PrinterModel")
                         .WithMany("Printers")
                         .HasForeignKey("ModelGuid");
@@ -1055,6 +1301,8 @@ namespace Equipment.Migrations.Entity
                         .HasForeignKey("StatusCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("InventoryData");
 
                     b.Navigation("PrinterModel");
 
@@ -1105,13 +1353,7 @@ namespace Equipment.Migrations.Entity
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OKB3Admin.M.Users.Users_M", "User")
-                        .WithOne("Sotrudnik")
-                        .HasForeignKey("OKB3Admin.M.Staf.Sotrudnik_M", "UserGID");
-
                     b.Navigation("Otdelenie");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OKB3Admin.M.Structura.Korpus_M", b =>
@@ -1134,6 +1376,17 @@ namespace Equipment.Migrations.Entity
                     b.Navigation("Korpus");
                 });
 
+            modelBuilder.Entity("OKB3Admin.M.Users.Users_M", b =>
+                {
+                    b.HasOne("OKB3Admin.M.Staf.Sotrudnik_M", "Sotrudnik")
+                        .WithOne("User")
+                        .HasForeignKey("OKB3Admin.M.Users.Users_M", "SotridnikGID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sotrudnik");
+                });
+
             modelBuilder.Entity("OKB3Admin.M.Printers.Cartridge", b =>
                 {
                     b.Navigation("Changelog");
@@ -1152,13 +1405,16 @@ namespace Equipment.Migrations.Entity
             modelBuilder.Entity("OKB3Admin.M.Printers.Printer", b =>
                 {
                     b.Navigation("Changelogs");
-
-                    b.Navigation("InventoryData");
                 });
 
             modelBuilder.Entity("OKB3Admin.M.Printers.Printer_Model", b =>
                 {
                     b.Navigation("Printers");
+                });
+
+            modelBuilder.Entity("OKB3Admin.M.Staf.Sotrudnik_M", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OKB3Admin.M.Structura.Korpus_M", b =>
@@ -1176,11 +1432,6 @@ namespace Equipment.Migrations.Entity
             modelBuilder.Entity("OKB3Admin.M.Structura.Podrazdelenie_M", b =>
                 {
                     b.Navigation("KorpusCollection");
-                });
-
-            modelBuilder.Entity("OKB3Admin.M.Users.Users_M", b =>
-                {
-                    b.Navigation("Sotrudnik");
                 });
 #pragma warning restore 612, 618
         }

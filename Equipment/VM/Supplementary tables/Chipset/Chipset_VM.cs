@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Equipment.M.EquipmentContext;
+﻿using Equipment.M.EquipmentContext;
 using Equipment.M.EquipmentContext.Models;
 using Equipment.V;
 using Equipment_accounting.Data;
-using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 namespace Equipment.VM
 {
     public class Chipset_VM :BaseModelForVM
@@ -110,12 +107,24 @@ namespace Equipment.VM
             {
                 return deleteItem ??= new RelayCommand(o =>
                 {
-                    using (EqContext ec = new EqContext())
+                    try
                     {
-                        ec.Chipset.Remove(SelectedItem);
-                        ec.SaveChanges();
-                        GetData();
+                        using (EqContext ec = new EqContext())
+                        {
+                            ec.Chipset.Remove(SelectedItem);
+                            ec.SaveChanges();
+                            GetData();
+                        }
                     }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+                        MessageBox.Show("Есть записи в другой таблице с данным сокетом", "Невозможно удлаить запись", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    
                 }, o => SelectedItem != null
                 );
             }

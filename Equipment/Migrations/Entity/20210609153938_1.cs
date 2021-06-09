@@ -12,6 +12,26 @@ namespace Equipment.Migrations.Entity
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Gorod = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Ulica = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Dom = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PostIndex = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.GID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Cartridge_Statuses",
                 columns: table => new
                 {
@@ -138,6 +158,53 @@ namespace Equipment.Migrations.Entity
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Mesto",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NameMesto = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Open = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    OtdelenieGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Etag = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Blok = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Kabinet = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mesto", x => x.GID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "NewsPosts",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Img = table.Column<byte[]>(type: "longblob", nullable: true),
+                    Title = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ShortText = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MainText = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    HaveMainText = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    File = table.Column<byte[]>(type: "longblob", nullable: true),
+                    FileName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Data = table.Column<DateTime>(type: "date", nullable: false),
+                    CanPost = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsPosts", x => x.GID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Podrazdelenies",
                 columns: table => new
                 {
@@ -145,7 +212,8 @@ namespace Equipment.Migrations.Entity
                     MainName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Psevdonim = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    mestoGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -165,6 +233,94 @@ namespace Equipment.Migrations.Entity
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Printer_Statuses", x => x.StatusCode);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RequestCategories",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NameCategory = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Index = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enable = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestCategories", x => x.GID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    curIniciativeType = table.Column<int>(type: "int", nullable: false),
+                    RequestCategoryGID = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RequestCategoryName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RequestSubCategoryGID = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RequestSubCategoryName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModuleName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ServisUserGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    OtdelenieGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ContactNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    curStatus = table.Column<int>(type: "int", nullable: false),
+                    StatusComent = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ChangeStatusTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    AddTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    InfoZayavka = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    file = table.Column<byte[]>(type: "longblob", nullable: true),
+                    file_name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.GID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RequestSubCategories",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CategoryGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NameSubCategory = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SubIndex = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModuleName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enable = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestSubCategories", x => x.GID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "StafPosts",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NamePost = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StafPosts", x => x.GID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -206,12 +362,7 @@ namespace Equipment.Migrations.Entity
                     ContactGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     TelefonMainGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     TelefonDopGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    Etag = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Blok = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Kabinet = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MestoGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     TelefonLineNumber = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Magistral = table.Column<string>(type: "longtext", nullable: true)
@@ -234,22 +385,6 @@ namespace Equipment.Migrations.Entity
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    SotridnikGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Login = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Pass = table.Column<byte[]>(type: "longblob", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.GID);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "VersionControlls",
                 columns: table => new
                 {
@@ -266,7 +401,6 @@ namespace Equipment.Migrations.Entity
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VersionControlls", x => x.Id);
-                    table.UniqueConstraint("AK_VersionControlls_ApplicationName", x => x.ApplicationName);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -323,7 +457,8 @@ namespace Equipment.Migrations.Entity
                     GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "varchar(95)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PodrazdelenieGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                    PodrazdelenieGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    mestoGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -338,43 +473,6 @@ namespace Equipment.Migrations.Entity
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Printers",
-                columns: table => new
-                {
-                    Guid = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    AsuId = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ModelGuid = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    InventoryNumber = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsNetwork = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    MAC = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    HardwareName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StatusCode = table.Column<int>(type: "int", nullable: false),
-                    DeleteMark = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Printers", x => x.Guid);
-                    table.UniqueConstraint("AK_Printers_InventoryNumber", x => x.InventoryNumber);
-                    table.ForeignKey(
-                        name: "FK_Printers_Printer_Models_ModelGuid",
-                        column: x => x.ModelGuid,
-                        principalTable: "Printer_Models",
-                        principalColumn: "Guid",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Printers_Printer_Statuses_StatusCode",
-                        column: x => x.StatusCode,
-                        principalTable: "Printer_Statuses",
-                        principalColumn: "StatusCode",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Otdelenie",
                 columns: table => new
                 {
@@ -383,61 +481,18 @@ namespace Equipment.Migrations.Entity
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Etag = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Blok = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Coment = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     KorpusGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Otdelenie", x => x.GID);
-                    table.UniqueConstraint("AK_Otdelenie_Number", x => x.Number);
                     table.ForeignKey(
                         name: "FK_Otdelenie_Korpus_KorpusGID",
                         column: x => x.KorpusGID,
                         principalTable: "Korpus",
                         principalColumn: "GID",
                         onDelete: ReferentialAction.SetNull);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Printer_StatusLogs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PrinterGuid = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    OldStatusCode = table.Column<int>(type: "int", nullable: false),
-                    NewStatusCode = table.Column<int>(type: "int", nullable: false),
-                    Commentary = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DateTime = table.Column<DateTime>(type: "datetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Printer_StatusLogs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Printer_StatusLogs_Printer_Statuses_NewStatusCode",
-                        column: x => x.NewStatusCode,
-                        principalTable: "Printer_Statuses",
-                        principalColumn: "StatusCode",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Printer_StatusLogs_Printer_Statuses_OldStatusCode",
-                        column: x => x.OldStatusCode,
-                        principalTable: "Printer_Statuses",
-                        principalColumn: "StatusCode",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Printer_StatusLogs_Printers_PrinterGuid",
-                        column: x => x.PrinterGuid,
-                        principalTable: "Printers",
-                        principalColumn: "Guid",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -456,7 +511,6 @@ namespace Equipment.Migrations.Entity
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cartridges", x => x.GuId);
-                    table.UniqueConstraint("AK_Cartridges_AsuId", x => x.AsuId);
                     table.ForeignKey(
                         name: "FK_Cartridges_Cartridge_Models_ModelGuid",
                         column: x => x.ModelGuid,
@@ -491,19 +545,12 @@ namespace Equipment.Migrations.Entity
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InventoryNumbers", x => x.Id);
-                    table.UniqueConstraint("AK_InventoryNumbers_Inventory", x => x.Inventory);
                     table.ForeignKey(
                         name: "FK_InventoryNumbers_Otdelenie_OtdelenieGID",
                         column: x => x.OtdelenieGID,
                         principalTable: "Otdelenie",
                         principalColumn: "GID",
                         onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_InventoryNumbers_Printers_Inventory",
-                        column: x => x.Inventory,
-                        principalTable: "Printers",
-                        principalColumn: "InventoryNumber",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -522,9 +569,10 @@ namespace Equipment.Migrations.Entity
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MainTabelNumber = table.Column<string>(type: "varchar(95)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPersonPostGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     UserGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    OtdelenieGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    UserWebGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    OtdelenieGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PostStafGID = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -535,12 +583,6 @@ namespace Equipment.Migrations.Entity
                         principalTable: "Otdelenie",
                         principalColumn: "GID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Sotrudniks_Users_UserGID",
-                        column: x => x.UserGID,
-                        principalTable: "Users",
-                        principalColumn: "GID",
-                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -595,6 +637,108 @@ namespace Equipment.Migrations.Entity
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Printers",
+                columns: table => new
+                {
+                    Guid = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AsuId = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModelGuid = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    InventoryNumber = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InventoryDataId = table.Column<int>(type: "int", nullable: true),
+                    IsNetwork = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    MAC = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    HardwareName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StatusCode = table.Column<int>(type: "int", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Printers", x => x.Guid);
+                    table.ForeignKey(
+                        name: "FK_Printers_InventoryNumbers_InventoryDataId",
+                        column: x => x.InventoryDataId,
+                        principalTable: "InventoryNumbers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Printers_Printer_Models_ModelGuid",
+                        column: x => x.ModelGuid,
+                        principalTable: "Printer_Models",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Printers_Printer_Statuses_StatusCode",
+                        column: x => x.StatusCode,
+                        principalTable: "Printer_Statuses",
+                        principalColumn: "StatusCode",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    GID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SotridnikGID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Login = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Pass = table.Column<byte[]>(type: "longblob", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.GID);
+                    table.ForeignKey(
+                        name: "FK_Users_Sotrudniks_SotridnikGID",
+                        column: x => x.SotridnikGID,
+                        principalTable: "Sotrudniks",
+                        principalColumn: "GID",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Printer_StatusLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PrinterGuid = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    OldStatusCode = table.Column<int>(type: "int", nullable: false),
+                    NewStatusCode = table.Column<int>(type: "int", nullable: false),
+                    Commentary = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DateTime = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Printer_StatusLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Printer_StatusLogs_Printer_Statuses_NewStatusCode",
+                        column: x => x.NewStatusCode,
+                        principalTable: "Printer_Statuses",
+                        principalColumn: "StatusCode",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Printer_StatusLogs_Printer_Statuses_OldStatusCode",
+                        column: x => x.OldStatusCode,
+                        principalTable: "Printer_Statuses",
+                        principalColumn: "StatusCode",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Printer_StatusLogs_Printers_PrinterGuid",
+                        column: x => x.PrinterGuid,
+                        principalTable: "Printers",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Cartridge_Statuses",
                 columns: new[] { "StatusCode", "Name" },
@@ -616,8 +760,8 @@ namespace Equipment.Migrations.Entity
 
             migrationBuilder.InsertData(
                 table: "Otdelenie",
-                columns: new[] { "GID", "Blok", "Coment", "Etag", "KorpusGID", "Name", "Number" },
-                values: new object[] { new Guid("a92f0cb6-bbc2-4001-9894-c7c7099580c7"), null, null, null, null, "Отделение", "01" });
+                columns: new[] { "GID", "IsOpen", "KorpusGID", "Name", "Number" },
+                values: new object[] { new Guid("a92f0cb6-bbc2-4001-9894-c7c7099580c7"), false, null, "Отделение", "01" });
 
             migrationBuilder.InsertData(
                 table: "Printer_Statuses",
@@ -626,38 +770,40 @@ namespace Equipment.Migrations.Entity
                 {
                     { 9, "Списан" },
                     { 8, "Обслуживание в АСУ" },
-                    { 7, "После ремонта" },
                     { 6, "Подготовлен к ремонту" },
-                    { 5, "На замене" },
+                    { 7, "После ремонта" },
                     { 4, "В эксплуатации" },
                     { 3, "В ремонте" },
                     { 2, "На складе" },
-                    { 1, "Нет" }
+                    { 1, "Нет" },
+                    { 5, "На замене" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "GID", "Login", "Pass", "SotridnikGID" },
-                values: new object[] { new Guid("add4a22a-aaa1-4d36-90ed-77102df1e5b8"), "sa", new byte[] { 49 }, new Guid("a3b5899d-36b3-4f2d-aa96-dd3174a6a6a4") });
 
             migrationBuilder.InsertData(
                 table: "VersionControlls",
                 columns: new[] { "Id", "ApplicationName", "CurVersion", "Enable", "Index" },
                 values: new object[,]
                 {
+                    { 8, "OKBPrinters", "21.05.2021", true, "a_printers" },
                     { 1, "OKBAdmin", "21.05.2021", true, "admin" },
                     { 2, "OKBStruktura", "21.05.2021", true, "a_struktura" },
                     { 3, "OKBStaf", "21.05.2021", true, "a_staf" },
                     { 4, "OKBUserEditor", "21.05.2021", true, "a_usereditor" },
                     { 5, "OKBATS", "21.05.2021", true, "a_ats" },
                     { 6, "OKBNews", "21.05.2021", true, "a_news" },
-                    { 7, "OKBRequestServis", "21.05.2021", true, "a_request" }
+                    { 7, "OKBRequestServis", "21.05.2021", true, "a_request" },
+                    { 9, "OKB_Web_News", "21.05.2021", true, "w_news" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Sotrudniks",
-                columns: new[] { "GID", "ContactPersonPostGID", "MainTabelNumber", "Name", "OtdelenieGID", "Patron", "Snils", "Sur", "UserGID" },
-                values: new object[] { new Guid("a3b5899d-36b3-4f2d-aa96-dd3174a6a6a4"), null, "01", "G", new Guid("a92f0cb6-bbc2-4001-9894-c7c7099580c7"), "R", "1234567890", "E", new Guid("add4a22a-aaa1-4d36-90ed-77102df1e5b8") });
+                columns: new[] { "GID", "MainTabelNumber", "Name", "OtdelenieGID", "Patron", "PostStafGID", "Snils", "Sur", "UserGID", "UserWebGID" },
+                values: new object[] { new Guid("a3b5899d-36b3-4f2d-aa96-dd3174a6a6a4"), "01", "G", new Guid("a92f0cb6-bbc2-4001-9894-c7c7099580c7"), "R", null, "1234567890", "E", new Guid("add4a22a-aaa1-4d36-90ed-77102df1e5b8"), null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "GID", "Login", "Pass", "SotridnikGID" },
+                values: new object[] { new Guid("add4a22a-aaa1-4d36-90ed-77102df1e5b8"), "sa", new byte[] { 49 }, new Guid("a3b5899d-36b3-4f2d-aa96-dd3174a6a6a4") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cartridge_Models_ManufacturerGuid",
@@ -781,6 +927,12 @@ namespace Equipment.Migrations.Entity
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_NewsPosts_GID",
+                table: "NewsPosts",
+                column: "GID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Otdelenie_GID",
                 table: "Otdelenie",
                 column: "GID",
@@ -848,6 +1000,11 @@ namespace Equipment.Migrations.Entity
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Printers_InventoryDataId",
+                table: "Printers",
+                column: "InventoryDataId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Printers_ModelGuid",
                 table: "Printers",
                 column: "ModelGuid");
@@ -856,6 +1013,48 @@ namespace Equipment.Migrations.Entity
                 name: "IX_Printers_StatusCode",
                 table: "Printers",
                 column: "StatusCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestCategories_GID",
+                table: "RequestCategories",
+                column: "GID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestCategories_Index",
+                table: "RequestCategories",
+                column: "Index",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestCategories_NameCategory",
+                table: "RequestCategories",
+                column: "NameCategory",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_GID",
+                table: "Requests",
+                column: "GID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestSubCategories_GID",
+                table: "RequestSubCategories",
+                column: "GID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestSubCategories_NameSubCategory",
+                table: "RequestSubCategories",
+                column: "NameSubCategory",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestSubCategories_SubIndex",
+                table: "RequestSubCategories",
+                column: "SubIndex",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sotrudniks_MainTabelNumber",
@@ -875,9 +1074,9 @@ namespace Equipment.Migrations.Entity
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sotrudniks_UserGID",
-                table: "Sotrudniks",
-                column: "UserGID",
+                name: "IX_StafPosts_NamePost",
+                table: "StafPosts",
+                column: "NamePost",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -944,6 +1143,9 @@ namespace Equipment.Migrations.Entity
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
                 name: "Cartridge_StatusLogs");
 
             migrationBuilder.DropTable(
@@ -956,16 +1158,28 @@ namespace Equipment.Migrations.Entity
                 name: "ER_Raports");
 
             migrationBuilder.DropTable(
-                name: "InventoryNumbers");
+                name: "Logs");
 
             migrationBuilder.DropTable(
-                name: "Logs");
+                name: "Mesto");
+
+            migrationBuilder.DropTable(
+                name: "NewsPosts");
 
             migrationBuilder.DropTable(
                 name: "Printer_StatusLogs");
 
             migrationBuilder.DropTable(
-                name: "Sotrudniks");
+                name: "RequestCategories");
+
+            migrationBuilder.DropTable(
+                name: "Requests");
+
+            migrationBuilder.DropTable(
+                name: "RequestSubCategories");
+
+            migrationBuilder.DropTable(
+                name: "StafPosts");
 
             migrationBuilder.DropTable(
                 name: "TelefonDop");
@@ -977,6 +1191,9 @@ namespace Equipment.Migrations.Entity
                 name: "Telefons");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "VersionControlls");
 
             migrationBuilder.DropTable(
@@ -986,7 +1203,7 @@ namespace Equipment.Migrations.Entity
                 name: "Printers");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Sotrudniks");
 
             migrationBuilder.DropTable(
                 name: "Cartridge_Models");
@@ -995,7 +1212,7 @@ namespace Equipment.Migrations.Entity
                 name: "Cartridge_Statuses");
 
             migrationBuilder.DropTable(
-                name: "Otdelenie");
+                name: "InventoryNumbers");
 
             migrationBuilder.DropTable(
                 name: "Printer_Models");
@@ -1004,10 +1221,13 @@ namespace Equipment.Migrations.Entity
                 name: "Printer_Statuses");
 
             migrationBuilder.DropTable(
-                name: "Korpus");
+                name: "Otdelenie");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");
+
+            migrationBuilder.DropTable(
+                name: "Korpus");
 
             migrationBuilder.DropTable(
                 name: "Podrazdelenies");

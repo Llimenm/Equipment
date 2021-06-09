@@ -1,21 +1,23 @@
-﻿using Equipment.M.EquipmentContext;
+﻿using Equipment.M;
+using Equipment.M.EquipmentContext;
 using Equipment.M.EquipmentContext.Models;
 using Equipment_accounting.Data;
 using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
+using OKB3Admin.M.InventorySystem;
+using OKB3Admin.M.Structura;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Equipment.VM
 {
     public class Monitor_VM : BaseModelForVM
     {
-        public Monitor_VM() { }
-
         #region Коллекции с таблицами и списками
 
         ObservableCollection<Monitor_M> manufacturerList;
@@ -25,6 +27,50 @@ namespace Equipment.VM
             set
             {
                 manufacturerList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        ObservableCollection<Monitor_M> filterModelList;
+        public ObservableCollection<Monitor_M> FilterModelList
+        {
+            get => filterModelList;
+            set
+            {
+                filterModelList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        ObservableCollection<Otdelenie_M> otdelenieList;
+        public ObservableCollection<Otdelenie_M> OtdelenieList
+        {
+            get => otdelenieList;
+            set
+            {
+                otdelenieList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        ObservableCollection<Status_M> statusList;
+        public ObservableCollection<Status_M> StatusList
+        {
+            get => statusList;
+            set
+            {
+                statusList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        ObservableCollection<Type_eq_M> typeEqList;
+        public ObservableCollection<Type_eq_M> TypeEqList
+        {
+            get => typeEqList;
+            set
+            {
+                typeEqList = value;
                 OnPropertyChanged();
             }
         }
@@ -46,18 +92,35 @@ namespace Equipment.VM
 
         public async Task GetData()
         {
-            NewMonitor = new Monitor_M();
+            NewMonitor = new Monitor_M()
+            {
+                Inventory = new Inventory_m()
+            };
             CurrentPage = 1;
-            await Task.Run(() => GetManufacturerList());
+            await Task.Run(() => GetLists());
             await Task.Run(() => GetMonitorTable());
             await Task.CompletedTask;
         }
-
-        public async Task GetManufacturerList()
+        /// <summary>
+        /// Получение списков производителей, статусов и отделений
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetLists()
         {
             using (EqContext ec = new EqContext())
             {
+                StatusList = new ObservableCollection<Status_M>(await ec.Status.ToListAsync());
                 ManufacturerList = new ObservableCollection<Monitor_M>(await ec.Monitor.GroupBy(x => x.Manufacturer).Select(x => new Monitor_M { Manufacturer = x.Key }).ToListAsync());
+                TypeEqList = new ObservableCollection<Type_eq_M>(await ec.Type_equipment.ToListAsync());
+                FilterModelList = new ObservableCollection<Monitor_M>(ec.Monitor.
+                    Where(x => FilterManufacturer != null ? x.Manufacturer == FilterManufacturer.Manufacturer : x.Manufacturer.Contains("")).
+                    GroupBy(x => x.Model).
+                    Select(x => new Monitor_M { Model = x.Key }).
+                    OrderBy(x => x.Model));
+                using (EntityContext entcon = new EntityContext())
+                {
+                    OtdelenieList = new ObservableCollection<Otdelenie_M>(await entcon.Otdelenie.ToListAsync());
+                }
             }
             await Task.CompletedTask;
         }
@@ -70,13 +133,30 @@ namespace Equipment.VM
         {
             using (EqContext ec = new EqContext())
             {
-                Allpage = Convert.ToInt32(Math.Ceiling(ec.Monitor.Where(x => string.IsNullOrEmpty(FilterModel) ? x.Model.Contains("") : x.Model.Contains(FilterModel)).
-                Where(x => FilterManufacturer == null ? x.Manufacturer.Contains("") : x.Manufacturer.Contains(FilterManufacturer.Manufacturer)).Count() / 25d));
-                var tmp = ec.Monitor.Where(x => string.IsNullOrEmpty(FilterModel) ? x.Model.Contains("") : x.Model.Contains(FilterModel)).
-                Where(x => FilterManufacturer == null ? x.Manufacturer.Contains("") : x.Manufacturer.Contains(FilterManufacturer.Manufacturer)).
-                Skip((CurrentPage - 1) * 25).
-                Take(25);
-                MonitorTable = new ObservableCollection<Monitor_M>(tmp.ToList());
+                var tmp = ec.Monitor.
+                        Include(x => x.Inventory).
+                        Include(x => x.TypeEquipment).
+                        Include(x => x.Status).
+                        Include(x => x.Komplekt).
+                        Include(x => x.Komplekt.Account).
+                        Where(x =>
+                        (StatusFilter != null ? x.Status == StatusFilter : x.Status.Name.Contains(""))
+                        & (FilterManufacturer != null ? x.Manufacturer == FilterManufacturer.Manufacturer : x.Manufacturer.Contains(""))
+                        & (FilterModel != null ? x.Model.Contains(FilterModel.Model) : x.Model.Contains(""))
+                        & (OtdelenieFilter != null ? x.Otdelenie_guid == OtdelenieFilter.GID : x.Manufacturer.Contains(""))
+                        & (InventoryFilter != null ? x.Inventory.Inventory.Contains(InventoryFilter) : x.Inventory.Inventory.Contains("")));
+                using (EntityContext entcon = new EntityContext())
+                {
+                    foreach (var item in tmp)
+                    {
+                        item.Otdelenie = OtdelenieList.FirstOrDefault(x => x.GID == item.Otdelenie_guid);
+                        item.InventoryNumber = entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == item.Inventory.Inventory);
+                    }
+
+                    Allpage = Convert.ToInt32(Math.Ceiling(tmp.ToList().Count() / 25d));
+                    MonitorTable = new ObservableCollection<Monitor_M>(tmp.Skip((CurrentPage - 1) * 25).Take(25).OrderBy(x => x.Inventory.Inventory));
+                }
+
             }
             await Task.CompletedTask;
         }
@@ -85,28 +165,73 @@ namespace Equipment.VM
 
         #region Filter элементы
 
-        Monitor_M filterManufacturer;
+        Monitor_M filterManufacturer = null;
         public Monitor_M FilterManufacturer
         {
             get => filterManufacturer;
             set
             {
                 filterManufacturer = value;
-                AcceptFilterMethod();
+                using (EqContext ec= new EqContext())
+                {
+                    FilterModelList = new ObservableCollection<Monitor_M>(ec.Monitor.
+                    Where(x => FilterManufacturer != null ? x.Manufacturer == FilterManufacturer.Manufacturer : x.Manufacturer.Contains("")).
+                    GroupBy(x => x.Model).
+                    Select(x => new Monitor_M { Model = x.Key }).
+                    OrderBy(x => x.Model));
+                }
+                GetMonitorTable();
                 OnPropertyChanged();
             }
         }
 
-        string filterModel;
-        public string FilterModel
+        Status_M statusFilter = null;
+        public Status_M StatusFilter
+        {
+            get => statusFilter;
+            set
+            {
+                statusFilter = value;
+                GetMonitorTable();
+                OnPropertyChanged();
+            }
+        }
+
+        Otdelenie_M otdelenieFilter = null;
+        public Otdelenie_M OtdelenieFilter
+        {
+            get => otdelenieFilter;
+            set
+            {
+                otdelenieFilter = value;
+                GetMonitorTable();
+                OnPropertyChanged();
+            }
+        }
+
+        Monitor_M filterModel = null;
+        public Monitor_M FilterModel
         {
             get => filterModel;
             set
             {
                 filterModel = value;
+                GetMonitorTable();
                 OnPropertyChanged();
             }
         }
+
+        string inventoryFilter = null;
+        public string InventoryFilter
+        {
+            get => inventoryFilter;
+            set
+            {
+                inventoryFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         RelayCommand acceptFilter;
         public RelayCommand AcceptFilter
@@ -115,17 +240,9 @@ namespace Equipment.VM
             {
                 return acceptFilter ??= new RelayCommand(o =>
                 {
-                    AcceptFilterMethod();
+                    GetMonitorTable();
                 });
             }
-
-        }
-        /// <summary>
-        /// Применение фильтра, вызывает GetMonitorTable
-        /// </summary>
-        private void AcceptFilterMethod()
-        {
-            GetMonitorTable();
         }
 
         /// <summary>
@@ -140,7 +257,11 @@ namespace Equipment.VM
                 {
                     FilterManufacturer = null;
                     FilterModel = null;
+                    InventoryFilter = null;
+                    StatusFilter = null;
+                    OtdelenieFilter = null;
                     Task.Run(() => GetMonitorTable());
+                    GetLists();
                 });
             }
         }
@@ -191,13 +312,26 @@ namespace Equipment.VM
                 {
                     CurrentPage -= 1;
                     Task.Run(() => GetMonitorTable());
-                }, o => CurrentPage > 1 );
+                }, o => CurrentPage > 1);
             }
         }
 
         #endregion
 
         #region Управление данными
+
+        RelayCommand refreshData;
+        public RelayCommand RefreshData
+        {
+            get
+            {
+                return refreshData ??= new RelayCommand(o =>
+                {
+                    GetData();
+                });
+            }
+        }
+
         Monitor_M selectedMonitor;
         public Monitor_M SelectedMonitor
         {
@@ -209,7 +343,7 @@ namespace Equipment.VM
             }
         }
 
-        Monitor_M newMonitor;
+        Monitor_M newMonitor = new Monitor_M();
         public Monitor_M NewMonitor
         {
             get => newMonitor;
@@ -220,13 +354,35 @@ namespace Equipment.VM
             }
         }
 
-        Monitor_M newManufacturer;
-        public Monitor_M NewManufacturer
+        Type_eq_M changeType;
+        public Type_eq_M ChangeType
         {
-            get => newManufacturer;
+            get => changeType;
             set
             {
-                newManufacturer = value;
+                changeType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        Status_M changeStatus;
+        public Status_M ChangeStatus
+        {
+            get => changeStatus;
+            set
+            {
+                changeStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        Otdelenie_M changeOtdelenie;
+        public Otdelenie_M ChangeOtdelenie
+        {
+            get => changeOtdelenie;
+            set
+            {
+                changeOtdelenie = value;
                 OnPropertyChanged();
             }
         }
@@ -240,13 +396,45 @@ namespace Equipment.VM
                 {
                     using (EqContext ec = new EqContext())
                     {
-                        ec.Monitor.Update(NewMonitor);
-                        ec.SaveChanges();
-                        NewMonitor = new Monitor_M();
-                        CurrentPage = Allpage;
-                        GetMonitorTable();
+                        using (EntityContext entcon = new EntityContext())
+                        {
+                            if (entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == NewMonitor.Inventory.Inventory) == null)
+                            {
+                                NewMonitor.Status_guid = NewMonitor.Status.GID;
+                                NewMonitor.Otdelenie_guid = NewMonitor.Otdelenie.GID;
+                                NewMonitor.InventoryNumber = new InventoryNumber_M()
+                                {
+                                    Inventory = NewMonitor.Inventory.Inventory,
+                                    OtdelenieGID = NewMonitor.Otdelenie.GID
+                                };
+                                entcon.InventoryNumbers.Update(NewMonitor.InventoryNumber);
+                                ec.Inventory.Update(NewMonitor.Inventory);
+                                ec.SaveChanges();
+                                NewMonitor.Inventory_id = NewMonitor.Inventory.Id;
+                                ec.Monitor.Update(NewMonitor);
+                                ec.SaveChanges();
+                                entcon.SaveChanges();
+                                NewMonitor = new Monitor_M()
+                                {
+                                    Inventory = new Inventory_m()
+                                };
+                                GetMonitorTable();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Такой инвентарный номер уже существует", "ErrorInventory", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
                     }
-                });
+                },
+                o =>
+                NewMonitor.Manufacturer != null
+                && NewMonitor.Model != null
+                && NewMonitor.Inventory.Inventory != null
+                && NewMonitor.Status != null
+                && NewMonitor.Otdelenie != null
+                && NewMonitor.TypeEquipment != null
+                );
             }
         }
 
@@ -259,6 +447,12 @@ namespace Equipment.VM
                 {
                     using (EqContext ec = new EqContext())
                     {
+                        using (EntityContext entcon = new EntityContext())
+                        {
+                            entcon.InventoryNumbers.Remove(entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedMonitor.Inventory.Inventory));
+                            entcon.SaveChanges();
+                        }
+                        ec.Inventory.Remove(SelectedMonitor.Inventory);
                         ec.Monitor.Remove(SelectedMonitor);
                         ec.SaveChanges();
                         GetMonitorTable();
@@ -278,20 +472,38 @@ namespace Equipment.VM
                 {
                     using (EqContext ec = new EqContext())
                     {
-                        if(newManufacturer != null)
+                        using (EntityContext entcon = new EntityContext())
                         {
-                            SelectedMonitor.Manufacturer = NewManufacturer.Manufacturer;
+                            if (SelectedMonitor.InventoryNumber.Inventory == SelectedMonitor.Inventory.Inventory || entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedMonitor.Inventory.Inventory) == null)
+                            {
+                                SelectedMonitor.InventoryNumber.Inventory = SelectedMonitor.Inventory.Inventory;
+                                entcon.InventoryNumbers.Update(SelectedMonitor.InventoryNumber);
+
+                                if (changeType != null)
+                                    SelectedMonitor.TypeEq_guid = SelectedMonitor.TypeEquipment.GID;
+                                if (changeStatus != null)
+                                    SelectedMonitor.Status_guid = SelectedMonitor.Status.GID;
+                                if (changeOtdelenie != null)
+                                    SelectedMonitor.Otdelenie_guid = SelectedMonitor.Otdelenie.GID;
+
+
+                                ec.Inventory.Update(SelectedMonitor.Inventory);
+                                ec.Monitor.Update(SelectedMonitor);
+                                ec.SaveChanges();
+                                entcon.SaveChanges();
+                                GetMonitorTable();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Такой инвентарный номер уже существует", "ErrorInventory", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }
-                        ec.Monitor.Update(SelectedMonitor);
-                        ec.SaveChanges();
-                        GetManufacturerList();
-                        NewManufacturer = null;
                     }
                 });
             }
         }
 
         #endregion
-
     }
 }
+    
