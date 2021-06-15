@@ -5,21 +5,22 @@ using System.Text;
 
 namespace Equipment.M
 {
-    public enum ServerType {relise, test, home }
+    public enum ServerType {relise, test, home, demonstration }
     public enum DbType { app, main}
 
     public static class ConectionSetting
     {
          static ServerType CurServerType
         {
-            get => ServerType.home;
+            get => ServerType.demonstration;
         }
 
         static Dictionary<string, string> con_list = new Dictionary<string, string>()
         {
             ["relise"] = "192.168.1.29",
             ["test"] ="192.168.3.196",
-            ["home"] = "localhost"
+            ["home"] = "localhost",
+            ["demonstration"] = "10.74.6.10"
         };
 
         static Dictionary<string, string> db_con_list = new Dictionary<string, string>()
