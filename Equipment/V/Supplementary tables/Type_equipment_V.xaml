@@ -13,7 +13,7 @@
         <VM:Type_equipment_VM/>
     </Page.DataContext>
 
-    <StackPanel>
+    <StackPanel Background="White">
         <TextBlock Margin="5" HorizontalAlignment="Stretch" Background="#FF7BACD6" Foreground="White" TextAlignment="Center" FontSize="18">
             <Run Text="Типы оборудования"/>
         </TextBlock>

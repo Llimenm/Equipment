@@ -123,10 +123,10 @@
              Grid.Row="3" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Изменить комплектацию...">
+                    <!--<MenuItem Header="Изменить комплектацию...">
                         <MenuItem Header="Мониторов" Command="{Binding ChangeMonitorKomplekt}"/>
                         <MenuItem Header="Мат плат" Command="{Binding ChangeMb_k}"/>
-                    </MenuItem>
+                    </MenuItem>-->
                     <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>

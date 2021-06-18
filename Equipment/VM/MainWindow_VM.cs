@@ -20,12 +20,6 @@ namespace Equipment.VM
         private Page status_page = new Status_V();
         private Page typeEq_page = new Type_equipment_V();
 
-
-        //private Page socket_page = new Socket_V();
-        //private Page chipset_page = new Chipset_V();
-        //private Page ramtype_page = new Ram_type_V();
-        //private Page motherboard_page = new Motherboard_V();
-
         public MainWindow_VM()
         {
             GetDataPage();
@@ -51,10 +45,6 @@ namespace Equipment.VM
             (account_page.DataContext as Account_VM).GetData();
 
 
-            //(socket_page.DataContext as Socket_VM).GetData();
-            //(chipset_page.DataContext as Chipset_VM).GetData();
-            //(ramtype_page.DataContext as Ram_type_VM).GetData();
-            //(motherboard_page.DataContext as Motherboard_Komplekt_VM).SetStartData();
         }
         
 
@@ -96,17 +86,7 @@ namespace Equipment.VM
             }
         }
 
-        private bool mbSelected;
-        public bool MbSelected
-        {
-            get => mbSelected;
-            set
-            {
-                mbSelected = value;
-                //FrameForPage = motherboard_page;
-                OnPropertyChanged();
-            }
-        }
+       
 
         private bool typeEqIsSelected;
         public bool TypeEqIsSelected
@@ -116,45 +96,6 @@ namespace Equipment.VM
             {
                 typeEqIsSelected = value;
                 FrameForPage = typeEq_page;
-                IsExpand = false;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool socketIsSelected;
-        public bool SocketIsSelectd
-        {
-            get => socketIsSelected;
-            set
-            {
-                socketIsSelected = value;
-                //FrameForPage = socket_page;
-                IsExpand = false;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool chipsetIsSelected;
-        public bool ChipsetIsSelected
-        {
-            get => chipsetIsSelected;
-            set
-            {
-                chipsetIsSelected = value;
-                //FrameForPage = chipset_page;
-                IsExpand = false;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool ramTypeIsSelected;
-        public bool RamTypeIsSelected
-        {
-            get => ramTypeIsSelected;
-            set
-            {
-                ramTypeIsSelected = value;
-                //FrameForPage = ramtype_page;
                 IsExpand = false;
                 OnPropertyChanged();
             }
@@ -185,5 +126,58 @@ namespace Equipment.VM
                 OnPropertyChanged();
             }
         }
+
+        private bool socketIsSelected;
+        public bool SocketIsSelectd
+        {
+            get => socketIsSelected;
+            set
+            {
+                socketIsSelected = value;
+                //FrameForPage = socket_page;
+                IsExpand = false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool mbSelected;
+        public bool MbSelected
+        {
+            get => mbSelected;
+            set
+            {
+                mbSelected = value;
+                //FrameForPage = motherboard_page;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool chipsetIsSelected;
+        public bool ChipsetIsSelected
+        {
+            get => chipsetIsSelected;
+            set
+            {
+                chipsetIsSelected = value;
+                //FrameForPage = chipset_page;
+                IsExpand = false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool ramTypeIsSelected;
+        public bool RamTypeIsSelected
+        {
+            get => ramTypeIsSelected;
+            set
+            {
+                ramTypeIsSelected = value;
+                //FrameForPage = ramtype_page;
+                IsExpand = false;
+                OnPropertyChanged();
+            }
+        }
+
+       
     }
 }

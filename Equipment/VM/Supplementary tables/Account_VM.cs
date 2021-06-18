@@ -48,7 +48,7 @@ namespace Equipment.VM
             using (EqContext ec = new EqContext())
             {
                 var tmp = ec.Account.
-                    Where(x => (x.Acc_user.Contains(SearchBox) || x.Password.Contains(SearchBox))).
+                    Where(x => x.Acc_user.Contains(SearchBox) || x.Password.Contains(SearchBox)).
                     Skip((CurrentPage - 1) * 25).
                     Take(25);
                 AllPage = Convert.ToInt32(Math.Ceiling(tmp.Count() / 25d));

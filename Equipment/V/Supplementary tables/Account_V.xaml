@@ -13,7 +13,7 @@
         <VM:Account_VM/>
     </Page.DataContext>
 
-    <StackPanel>
+    <StackPanel Background="White">
         <StackPanel.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Обновить" Command="{Binding Refresh}"/>
