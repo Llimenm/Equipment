@@ -5,6 +5,7 @@ using Equipment_accounting.Data;
 using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
 using OKB3Admin.M.InventorySystem;
+using OKB3Admin.M.Printers;
 using OKB3Admin.M.Structura;
 using System;
 using System.Collections.Generic;
@@ -414,6 +415,23 @@ namespace Equipment.VM
                                 ec.Monitor.Update(NewMonitor);
                                 ec.SaveChanges();
                                 entcon.SaveChanges();
+
+                                Log new_log = new Log()
+                                {
+                                    ItemId = NewMonitor.GID.ToString(),
+                                    LogCategoryEnum = LogCategoryEnum.Добавление,
+                                    LogTypeEnum = LogTypeEnum.Монитор,
+                                    Changes =
+                                        "Добавлен " + NewMonitor.TypeEquipment.Type_name + " " + NewMonitor.Manufacturer + " " + NewMonitor.Model + "\n"
+                                        + "С инвентарным номером: " + NewMonitor.Inventory.Inventory + "\n"
+                                        + "В отделение: " + NewMonitor.Otdelenie.Name + "\n" 
+                                        + "Статус: " + NewMonitor.Status.Name,
+                                    ChangeDate = DateTime.Now
+                                };
+
+                                entcon.Logs.Add(new_log);
+                                entcon.SaveChanges();
+
                                 NewMonitor = new Monitor_M()
                                 {
                                     Inventory = new Inventory_m()
@@ -445,17 +463,33 @@ namespace Equipment.VM
             {
                 return deleteMonitor ??= new RelayCommand(o =>
                 {
-                    using (EqContext ec = new EqContext())
+                    if (MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        using (EntityContext entcon = new EntityContext())
+                        using (EqContext ec = new EqContext())
                         {
-                            entcon.InventoryNumbers.Remove(entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedMonitor.Inventory.Inventory));
-                            entcon.SaveChanges();
+                            using (EntityContext entcon = new EntityContext())
+                            {
+                                entcon.InventoryNumbers.Remove(entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedMonitor.Inventory.Inventory));
+                                Log log = new Log()
+                                {
+                                    ItemId = SelectedMonitor.GID.ToString(),
+                                    LogCategoryEnum = LogCategoryEnum.Удаление,
+                                    LogTypeEnum = LogTypeEnum.Монитор,
+                                    Changes =
+                                        "Удалён " + SelectedMonitor.TypeEquipment.Type_name + " " + SelectedMonitor.Manufacturer + " " + SelectedMonitor.Model + "\n"
+                                        + "С инвентарным номером: " + SelectedMonitor.Inventory.Inventory + "\n"
+                                        + "В отделении: " + SelectedMonitor.Otdelenie.Name + "\n",
+                                    ChangeDate = DateTime.Now
+                                };
+                                entcon.Logs.Add(log);
+                                entcon.SaveChanges();
+
+                            }
+                            ec.Inventory.Remove(SelectedMonitor.Inventory);
+                            ec.Monitor.Remove(SelectedMonitor);
+                            ec.SaveChanges();
+                            GetMonitorTable();
                         }
-                        ec.Inventory.Remove(SelectedMonitor.Inventory);
-                        ec.Monitor.Remove(SelectedMonitor);
-                        ec.SaveChanges();
-                        GetMonitorTable();
                     }
                 }
                 , o => SelectedMonitor != null
@@ -479,15 +513,30 @@ namespace Equipment.VM
                                 SelectedMonitor.InventoryNumber.Inventory = SelectedMonitor.Inventory.Inventory;
                                 entcon.InventoryNumbers.Update(SelectedMonitor.InventoryNumber);
 
-                                if (changeType != null)
-                                    SelectedMonitor.TypeEq_guid = SelectedMonitor.TypeEquipment.GID;
-                                if (changeStatus != null)
-                                    SelectedMonitor.Status_guid = SelectedMonitor.Status.GID;
-                                if (changeOtdelenie != null)
-                                    SelectedMonitor.Otdelenie_guid = SelectedMonitor.Otdelenie.GID;
+                                if (ChangeType != null)
+                                {
+                                    SelectedMonitor.TypeEquipment = ChangeType;
+                                    SelectedMonitor.TypeEq_guid = ChangeType.GID;
+                                }
+                                if (ChangeStatus != null)
+                                {
+                                    SelectedMonitor.Status = ChangeStatus;
+                                    SelectedMonitor.Status_guid = ChangeStatus.GID;
+                                }
+                                if (ChangeOtdelenie != null)
+                                {
+                                    SelectedMonitor.Otdelenie = ChangeOtdelenie;
+                                    SelectedMonitor.Otdelenie_guid = ChangeOtdelenie.GID;
+                                }
 
+                                Log log = GetChanges(SelectedMonitor);
+                                if (log != null)
+                                {
+                                    entcon.Logs.Add(log);
+                                }
 
                                 ec.Inventory.Update(SelectedMonitor.Inventory);
+                                ec.SaveChanges();
                                 ec.Monitor.Update(SelectedMonitor);
                                 ec.SaveChanges();
                                 entcon.SaveChanges();
@@ -503,7 +552,63 @@ namespace Equipment.VM
             }
         }
 
+        private Log GetChanges(Monitor_M monitor)
+        {
+            using (EqContext ec = new EqContext())
+            {
+
+                string changes = "Изменения\n";
+                Monitor_M oldMonitor = ec.Monitor.
+                    Include(x => x.TypeEquipment).
+                    Include(x => x.Inventory).
+                    Include(x => x.Status).
+                    FirstOrDefault(x => x.GID == monitor.GID);
+                using (EntityContext entcon = new EntityContext())
+                {
+                    oldMonitor.Otdelenie = entcon.Otdelenie.FirstOrDefault(x => x.GID == oldMonitor.Otdelenie_guid);
+                }
+
+                if (monitor.TypeEq_guid != oldMonitor.TypeEq_guid)
+                {
+                    changes += "Тип: " + oldMonitor.TypeEquipment.Type_name + " => " + monitor.TypeEquipment.Type_name + "\n";
+                }
+                if (monitor.Inventory.Inventory != oldMonitor.Inventory.Inventory)
+                {
+                    changes += "Инв. номер: " + oldMonitor.Inventory.Inventory + " => " + monitor.Inventory.Inventory + "\n";
+                }
+                if (monitor.Manufacturer != oldMonitor.Manufacturer)
+                {
+                    changes += "Производитель: " + oldMonitor.Manufacturer + " => " + monitor.Manufacturer + "\n";
+                }
+                if (monitor.Model != oldMonitor.Model)
+                {
+                    changes += "Модель : " + oldMonitor.Model + " => " + monitor.Model + "\n";
+                }
+                if (monitor.Otdelenie_guid != oldMonitor.Otdelenie_guid)
+                {
+                    changes += "Отделение: " + oldMonitor.Otdelenie.Name + " => " + monitor.Otdelenie.Name + "\n";
+                }
+                if (monitor.Status_guid != oldMonitor.Status_guid)
+                {
+                    changes += "Статус: " + oldMonitor.Status.Name + " => " + monitor.Status.Name + "\n";
+                }
+
+                if (changes == "Изменения\n")
+                {
+                    return null;
+                }
+                else
+                    return new Log()
+                    {
+                        ItemId = monitor.GID.ToString(),
+                        LogCategoryEnum = LogCategoryEnum.Изменение,
+                        LogTypeEnum = LogTypeEnum.Монитор,
+                        Changes = changes,
+                        ChangeDate = DateTime.Now
+                    };
+            }
+
+        }
         #endregion
     }
 }
-    

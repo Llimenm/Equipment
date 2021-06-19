@@ -15,7 +15,7 @@ using OKB3Admin.M.InventorySystem;
 using Microsoft.EntityFrameworkCore;
 using Equipment.V.Monitor;
 using OKB3Admin.M.Structura;
-
+using OKB3Admin.M.Printers;
 
 namespace Equipment.VM
 {
@@ -24,7 +24,7 @@ namespace Equipment.VM
         public Komplekt_VM() { }
 
         #region Get Запросы на выборку данных
-        public void GetStartData() //получение данных
+        public void GetStartData() //Получение данных
         {
             using (EqContext ec = new EqContext())
             {
@@ -199,7 +199,25 @@ namespace Equipment.VM
 
                                     ec.Komplekt.Update(NewItem);
                                     ec.SaveChanges();
+                                    Log log = new Log()
+                                    {
+                                        ItemId = NewItem.GID.ToString(),
+                                        LogCategoryEnum = LogCategoryEnum.Добавление,
+                                        LogTypeEnum = LogTypeEnum.Комплекты,
+                                        Changes =
+                                           "Добавлен " + NewItem.Type_Eq.Type_name + " " + NewItem.Account.Acc_user + "\n"
+                                           + "С инвентарным номером: " + NewItem.Inventory.Inventory + "\n"
+                                           + "В отделение: " + NewItem.Otdelenie.Name + "\n"
+                                           + "Статус: " + NewItem.Status.Name,
+                                        ChangeDate = DateTime.Now
+                                    };
                                     GetStartData();
+
+                                   
+
+                                    entcon.Logs.Add(log);
+                                    entcon.SaveChanges();
+
                                     NewItem = new Komplekt_M
                                     {
                                         Account = new Account_M(),
@@ -252,11 +270,20 @@ namespace Equipment.VM
                             using (EqContext ec = new EqContext())
                             {
                                 if (NewOtdelenie != null)
+                                {
                                     SelectedItem.Otdelenie_gid = NewOtdelenie.GID;
+                                    SelectedItem.Otdelenie = NewOtdelenie;
+                                }
                                 if (NewStatus != null)
+                                {
                                     SelectedItem.Status_guid = NewStatus.GID;
+                                    SelectedItem.Status = NewStatus;
+                                }
                                 if (NewType != null)
+                                {
                                     SelectedItem.Type_eq_guid = NewType.GID;
+                                    SelectedItem.Type_Eq = NewType;
+                                }
 
                                 SelectedItem.InventoryNumber.Inventory = SelectedItem.Inventory.Inventory;
                                 entcont.InventoryNumbers.Update(SelectedItem.InventoryNumber);
@@ -264,11 +291,11 @@ namespace Equipment.VM
                                 ec.Account.Update(SelectedItem.Account);
                                 ec.Komplekt.Update(SelectedItem);
 
-                                if (NewType != null) //костыль
-                                    SelectedItem.Type_eq_guid = NewType.GID; 
-                                if (NewStatus != null) //костыль
-                                    SelectedItem.Status_guid = NewStatus.GID;
-
+                                Log log = GetChanges(SelectedItem);
+                                if (log != null)
+                                {
+                                    entcont.Logs.Add(log);
+                                }
                                 entcont.SaveChanges();
                                 ec.SaveChanges();
                                 GetEndKomplekt();
@@ -286,6 +313,71 @@ namespace Equipment.VM
                 });
             }
         }
+
+        /// <summary>
+        /// Составляет Лог об внесенных изменениях в комплект
+        /// </summary>
+        /// <param name="komplekt"></param>
+        /// <returns></returns>
+        private Log GetChanges(Komplekt_M komplekt)
+        {
+            using (EqContext ec = new EqContext())
+            {
+
+                string changes = "Изменения\n";
+                Komplekt_M oldKomplekt = ec.Komplekt.
+                    Include(x => x.Type_Eq).
+                    Include(x => x.Inventory).
+                    Include(x => x.Status).
+                    Include(x => x.Account).
+                    FirstOrDefault(x => x.GID == komplekt.GID);
+
+                using (EntityContext entcon = new EntityContext())
+                {
+                    oldKomplekt.Otdelenie = entcon.Otdelenie.FirstOrDefault(x => x.GID == oldKomplekt.Otdelenie_gid);
+                }
+
+                if (komplekt.Type_eq_guid != oldKomplekt.Type_eq_guid)
+                {
+                    changes += "Тип: " + oldKomplekt.Type_Eq.Type_name + " => " + komplekt.Type_Eq.Type_name + "\n";
+                }
+                if (komplekt.Inventory.Inventory != oldKomplekt.Inventory.Inventory)
+                {
+                    changes += "Инв. номер: " + oldKomplekt.Inventory.Inventory + " => " + komplekt.Inventory.Inventory + "\n";
+                }
+                if (komplekt.Account.Acc_user != oldKomplekt.Account.Acc_user)
+                {
+                    changes += "Имя комплекта: " + oldKomplekt.Account.Acc_user + " => " + komplekt.Account.Acc_user + "\n";
+                }
+                if (komplekt.Account.Password != oldKomplekt.Account.Password)
+                {
+                    changes += "Пароль : " + oldKomplekt.Account.Password + " => " + komplekt.Account.Password + "\n";
+                }
+                if (komplekt.Otdelenie_gid != oldKomplekt.Otdelenie_gid)
+                {
+                    changes += "Отделение: " + oldKomplekt.Otdelenie.Name + " => " + komplekt.Otdelenie.Name + "\n";
+                }
+                if (komplekt.Status_guid != oldKomplekt.Status_guid)
+                {
+                    changes += "Статус: " + oldKomplekt.Status.Name + " => " + komplekt.Status.Name + "\n";
+                }
+
+                if (changes == "Изменения\n")
+                {
+                    return null;
+                }
+                else
+                    return new Log()
+                    {
+                        ItemId = komplekt.GID.ToString(),
+                        LogCategoryEnum = LogCategoryEnum.Изменение,
+                        LogTypeEnum = LogTypeEnum.Комплекты,
+                        Changes = changes,
+                        ChangeDate = DateTime.Now
+                    };
+            }
+        }
+
         Status_M newStatus;
         public Status_M NewStatus
         {
@@ -317,39 +409,6 @@ namespace Equipment.VM
             }
         }
 
-        RelayCommand changeMB_k;
-        public RelayCommand ChangeMb_k //Вызов изменения списка материнсикх плат комплекта
-        {
-            get
-            {
-                return changeMB_k ??
-                    (changeMB_k = new RelayCommand(o =>
-                    {
-                        Add_MB_K_V window = new Add_MB_K_V();
-                        (window.DataContext as Motherboard_Komplekt_VM).ChangeOrView = true;
-                        (window.DataContext as Motherboard_Komplekt_VM).SetStartData(SelectedItem.GID);
-                        window.ShowDialog();
-                        //GetMB_K_Table();
-                    }, o => SelectedItem != null
-                    ));
-            }
-        }
-
-        RelayCommand changeMonitorKomplekt;
-        public RelayCommand ChangeMonitorKomplekt
-        {
-            get
-            {
-                return changeMonitorKomplekt ??= new RelayCommand(o =>
-                {
-                    Monitor_Komplekt_V monitorKomplekt = new Monitor_Komplekt_V();
-                    //(monitorKomplekt.DataContext as Monitor_VM).GetData();
-                    //(monitorKomplekt.DataContext as Monitor_VM).GetMonitorKomplekt(SelectedItem.GID);
-                    monitorKomplekt.ShowDialog();
-                }, o => SelectedItem != null);
-            }
-        }
-
         #endregion
 
         #region Удаление комплекта
@@ -367,13 +426,27 @@ namespace Equipment.VM
                         {
                             InventoryNumber_M inventoryForDelete = entcont.InventoryNumbers.FirstOrDefault(x => x.Inventory == SelectedItem.Inventory.Inventory);
                             entcont.InventoryNumbers.Remove(inventoryForDelete);
+
+                            Log log = new Log()
+                            {
+                                ItemId = SelectedItem.GID.ToString(),
+                                LogCategoryEnum = LogCategoryEnum.Удаление,
+                                LogTypeEnum = LogTypeEnum.Комплекты,
+                                Changes =
+                                           "Удалён " + SelectedItem.Type_Eq.Type_name + " " + SelectedItem.Account.Acc_user + " " + "\n"
+                                           + "С инвентарным номером: " + SelectedItem.Inventory.Inventory + "\n"
+                                           + "В отделении: " + SelectedItem.Otdelenie.Name + "\n",
+                                ChangeDate = DateTime.Now
+                            };
+                            entcont.Logs.Add(log);
                             entcont.SaveChanges();
+
+                            ec.SaveChanges();
+                            ec.Account.Remove(SelectedItem.Account);
+                            ec.Komplekt.Remove(SelectedItem);
+                            ec.SaveChanges();
+                            GetStartData();
                         }
-                        ec.SaveChanges();
-                        ec.Account.Remove(SelectedItem.Account);
-                        ec.Komplekt.Remove(SelectedItem);
-                        ec.SaveChanges();
-                        GetStartData();
                     }
                 }, o => SelectedItem != null);
             }

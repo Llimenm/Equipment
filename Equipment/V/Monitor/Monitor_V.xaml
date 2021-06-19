@@ -62,16 +62,6 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <!--<TextBox MinWidth="140" Text="{Binding FilterModel, UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.InputBindings>
-                        <KeyBinding Key="Return" Command="{Binding AcceptFilter}"/>
-                    </TextBox.InputBindings>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="LostFocus">
-                            <i:InvokeCommandAction Command="{Binding AcceptFilter}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </TextBox>-->
             </StackPanel>
             <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
                 <TextBlock Text="Отделение"/>
@@ -110,6 +100,7 @@
             </DataGrid.Resources>
             <DataGrid.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Изменения..." />
                     <MenuItem Header="Удалить" Command="{Binding DeleteMonitor}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>

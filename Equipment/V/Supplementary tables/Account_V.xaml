@@ -43,14 +43,6 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Id}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                                <TextBlock Text="Id" FontSize="18"/>
-                            </GridViewColumn>
-                            <GridViewColumn Width="auto">
                                 <GridViewColumn.Header>
                                     <TextBlock Text="Имя" FontSize="18"/>
                                 </GridViewColumn.Header>

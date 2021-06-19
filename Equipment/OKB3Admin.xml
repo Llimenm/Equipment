@@ -175,12 +175,12 @@
         </member>
         <member name="P:OKB3Admin.M.InventorySystem.InventoryNumber_M.OtdelenieGID">
             <summary>
-            <see cref="T:System.Guid"/>-ссылка на отделение, которому принадлежит <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/>
+            <see cref="T:System.Guid"/>-ссылка на отделение, которому принадлежит <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/> *навигация
             </summary>
         </member>
         <member name="P:OKB3Admin.M.InventorySystem.InventoryNumber_M.Otdelenie">
             <summary>
-            Отделение
+            Отделение *навигация
             </summary>
         </member>
         <member name="T:OKB3Admin.M.Printers.LogCategoryEnum">
@@ -216,6 +216,16 @@
         <member name="F:OKB3Admin.M.Printers.LogTypeEnum.Картридж">
             <summary>
             Изменение записи типа <see cref="T:OKB3Admin.M.Printers.Cartridge"/> и его производных. Например: <see cref="T:OKB3Admin.M.Printers.Cartridge_Model"/>
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogTypeEnum.Комплекты">
+            <summary>
+            Изменение записи типа Комплект и его производных. />
+            </summary>
+        </member>
+        <member name="F:OKB3Admin.M.Printers.LogTypeEnum.Монитор">
+            <summary>
+            Изменение записи типа Монитор и его производных. />
             </summary>
         </member>
         <member name="T:OKB3Admin.M.Printers.Log">
@@ -456,7 +466,7 @@
         </member>
         <member name="T:OKB3Admin.M.Printers.Printer">
             <summary>
-            Принтеррр
+            Объект <see cref="T:OKB3Admin.M.Printers.Printer"/>
             </summary>
         </member>
         <member name="P:OKB3Admin.M.Printers.Printer.Guid">
@@ -480,11 +490,6 @@
             </summary>
         </member>
         <member name="P:OKB3Admin.M.Printers.Printer.InventoryNumber">
-            <summary>
-            Инвентарный номер, а также ссылка на <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/>
-            </summary>
-        </member>
-        <member name="P:OKB3Admin.M.Printers.Printer.InventoryData">
             <summary>
             Ссылка на <see cref="T:OKB3Admin.M.InventorySystem.InventoryNumber_M"/>
             </summary>
@@ -864,7 +869,7 @@
         </member>
         <member name="P:OKB3Admin.M.Structura.Otdelenie_M.SotrudnikCollection">
             <summary>
-            список все хсотрудников
+            список все сотрудников
             </summary>
         </member>
         <member name="F:OKB3Admin.M.Structura.Podrazdelenie_M.main_name">
