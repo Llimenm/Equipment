@@ -1,0 +1,85 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Equipment.V"
+        xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.V.Show_log_V"
+        mc:Ignorable="d"
+        Title="Show_log_V" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.DataContext>
+        <VM:Show_log_VM/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="75"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Background="#FF7BACD6" Foreground="White" Margin="5" Grid.ColumnSpan="2" Text="История" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+
+        <StackPanel Margin="5" Grid.Row="1" Grid.ColumnSpan="2">
+            <Border BorderBrush="#FF7BACD6" BorderThickness="1" Margin="2">
+                <StackPanel>
+                    <TextBlock Text="Поиск по изменениям:" Margin="1"/>
+                    <Border BorderBrush="Black" BorderThickness="0.2">
+                        <TextBox Text="{Binding SearchBox}" Background="#FFDCE7F0" Foreground="Black"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <Button Command="{Binding AcceptFilter}" BorderBrush="#FF7BACD6" BorderThickness="1,1,1,1" Margin="2" Foreground="White" Content="Найти" Background="#FF7BACD6" Cursor="Hand"/>
+        </StackPanel>
+        
+        <DataGrid Margin="5" AutoGenerateColumns="False" ItemsSource="{Binding LogTable}" SelectedItem="{Binding SelectedLog}" Grid.Row="2" Grid.Column="0" IsReadOnly="True" SelectionMode="Single" CanUserAddRows="False">
+            <DataGrid.Columns>
+                
+                <DataGridTemplateColumn Header="Дата изменения" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ChangeDate}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Тип изменения" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding LogCategory}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Изменения" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Changes}" TextWrapping="NoWrap"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Margin="5" >
+            <TextBlock  FontSize="16" Margin="3">
+                    <Run Text="Дата изменения: "></Run>
+                    <Run Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.ChangeDate}"></Run>
+            </TextBlock>
+            <TextBlock FontSize="16" Margin="3">
+                    <Run Text="Категория изменения: "></Run>
+                    <Run Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.LogCategory}"></Run>
+            </TextBlock>
+            <TextBlock FontSize="16" Margin="3">
+                    <Run Text="Тип объекта: "></Run>
+                    <Run Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.LogType}"></Run>
+            </TextBlock>
+            <TextBlock FontSize="16" Text="Изменения:" Margin="3"/>
+            <TextBox FontSize="16" Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.Changes}" IsReadOnly="True" Margin="3" Height="190" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

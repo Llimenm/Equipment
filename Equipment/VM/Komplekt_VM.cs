@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Equipment.V.Monitor;
 using OKB3Admin.M.Structura;
 using OKB3Admin.M.Printers;
+using Equipment.V;
 
 namespace Equipment.VM
 {
@@ -46,7 +47,7 @@ namespace Equipment.VM
             {
                 using (EqContext ec = new EqContext())
                 {
-                    var i = ec.Komplekt.
+                    var tmp = ec.Komplekt.
                         Include(x => x.Account).
                         Include(x => x.Status).
                         Include(x => x.Type_Eq).
@@ -57,26 +58,30 @@ namespace Equipment.VM
                         & (SelectedFilterStatus != null ? x.Status_guid == SelectedFilterStatus.GID : x.Status_guid.ToString().Contains(""))
                         & (SelectedFilterInventory != null ? x.Inventory.Inventory.Contains(SelectedFilterInventory) : x.Inventory.Inventory.Contains(""))
                         & (SelectedFilterType != null ? x.Type_eq_guid == SelectedFilterType.GID : x.Type_eq_guid.ToString().Contains(""))
-                        & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.Inventory.Inventory.Contains(""))
-                        ).ToList();
-                    foreach (var item in i)
+                        & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.Inventory.Inventory.Contains(""))).
+                        Skip((CurrentPage - 1) * 25).
+                        Take(25);
+                    foreach (var item in tmp)
                     {
                         item.InventoryNumber = entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == item.Inventory.Inventory);
                         item.Otdelenie = entcon.Otdelenie.FirstOrDefault(x => x.GID == item.Otdelenie_gid);
                     }
-
-                    AllPage = Convert.ToInt32(Math.Ceiling(i.Count() / 25d));
-
-                    i.Skip((CurrentPage - 1) * 25).
-                    Take(25);
+                    AllPage = Convert.ToInt32(Math.Ceiling(ec.Komplekt.Where
+                        (x =>
+                        (string.IsNullOrEmpty(FilterName) ? x.Account.Acc_user.Contains("") : x.Account.Acc_user.Contains(FilterName))
+                        & (SelectedFilterStatus != null ? x.Status_guid == SelectedFilterStatus.GID : x.Status_guid.ToString().Contains(""))
+                        & (SelectedFilterInventory != null ? x.Inventory.Inventory.Contains(SelectedFilterInventory) : x.Inventory.Inventory.Contains(""))
+                        & (SelectedFilterType != null ? x.Type_eq_guid == SelectedFilterType.GID : x.Type_eq_guid.ToString().Contains(""))
+                        & (SelectedFilterOtdelenie != null ? x.Otdelenie_gid == SelectedFilterOtdelenie.GID : x.Inventory.Inventory.Contains(""))).Count() / 25d));
                     using (EntityContext entCont = new EntityContext())
                     {
-                        foreach (var item in i)
+                        foreach (var item in tmp)
                         {
                             item.Otdelenie = entCont.Otdelenie.FirstOrDefault(x => x.GID == item.Otdelenie_gid);
                         }
                     }
-                    KomplektTable = new ObservableCollection<Komplekt_M>(i);
+
+                    KomplektTable = new ObservableCollection<Komplekt_M>(tmp);
                     NewItem.Status = null;
                     NewItem.Otdelenie = null;
                 }
@@ -208,7 +213,8 @@ namespace Equipment.VM
                                            "Добавлен " + NewItem.Type_Eq.Type_name + " " + NewItem.Account.Acc_user + "\n"
                                            + "С инвентарным номером: " + NewItem.Inventory.Inventory + "\n"
                                            + "В отделение: " + NewItem.Otdelenie.Name + "\n"
-                                           + "Статус: " + NewItem.Status.Name,
+                                           + "Статус: " + NewItem.Status.Name + "\n"
+                                           + "Комментарий: " + NewItem.Comment,
                                         ChangeDate = DateTime.Now
                                     };
                                     GetStartData();
@@ -360,6 +366,10 @@ namespace Equipment.VM
                 if (komplekt.Status_guid != oldKomplekt.Status_guid)
                 {
                     changes += "Статус: " + oldKomplekt.Status.Name + " => " + komplekt.Status.Name + "\n";
+                }
+                if (komplekt.Comment != oldKomplekt.Comment)
+                {
+                    changes += "Комментарий: " + komplekt.Comment + "\n";
                 }
 
                 if (changes == "Изменения\n")
@@ -605,7 +615,20 @@ namespace Equipment.VM
 
         #endregion
 
-        
+        RelayCommand showLogs;
+        public RelayCommand ShowLogs
+        {
+            get
+            {
+                return showLogs ??= new RelayCommand(o =>
+                {
+                    Show_log_V log_window = new Show_log_V();
+                    (log_window.DataContext as Show_log_VM).GetData(SelectedItem.GID.ToString());
+                    log_window.ShowDialog();
+                });
+            }
+        }
+
         public void ErrorInventory()
         {
             MessageBox.Show("Такой инвентарный номер уже существует","ErrorInventory", MessageBoxButton.OK, MessageBoxImage.Error);

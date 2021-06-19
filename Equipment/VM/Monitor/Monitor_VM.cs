@@ -1,6 +1,7 @@
 ﻿using Equipment.M;
 using Equipment.M.EquipmentContext;
 using Equipment.M.EquipmentContext.Models;
+using Equipment.V;
 using Equipment_accounting.Data;
 using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
@@ -145,7 +146,10 @@ namespace Equipment.VM
                         & (FilterManufacturer != null ? x.Manufacturer == FilterManufacturer.Manufacturer : x.Manufacturer.Contains(""))
                         & (FilterModel != null ? x.Model.Contains(FilterModel.Model) : x.Model.Contains(""))
                         & (OtdelenieFilter != null ? x.Otdelenie_guid == OtdelenieFilter.GID : x.Manufacturer.Contains(""))
-                        & (InventoryFilter != null ? x.Inventory.Inventory.Contains(InventoryFilter) : x.Inventory.Inventory.Contains("")));
+                        & (InventoryFilter != null ? x.Inventory.Inventory.Contains(InventoryFilter) : x.Inventory.Inventory.Contains(""))).
+                        Skip((CurrentPage - 1) * 25).
+                        Take(25).
+                        OrderBy(x => x.Inventory.Inventory);
                 using (EntityContext entcon = new EntityContext())
                 {
                     foreach (var item in tmp)
@@ -154,8 +158,13 @@ namespace Equipment.VM
                         item.InventoryNumber = entcon.InventoryNumbers.FirstOrDefault(x => x.Inventory == item.Inventory.Inventory);
                     }
 
-                    Allpage = Convert.ToInt32(Math.Ceiling(tmp.ToList().Count() / 25d));
-                    MonitorTable = new ObservableCollection<Monitor_M>(tmp.Skip((CurrentPage - 1) * 25).Take(25).OrderBy(x => x.Inventory.Inventory));
+                    Allpage = Convert.ToInt32(Math.Ceiling(tmp.Where(x =>
+                       (StatusFilter != null ? x.Status == StatusFilter : x.Status.Name.Contains(""))
+                       & (FilterManufacturer != null ? x.Manufacturer == FilterManufacturer.Manufacturer : x.Manufacturer.Contains(""))
+                       & (FilterModel != null ? x.Model.Contains(FilterModel.Model) : x.Model.Contains(""))
+                       & (OtdelenieFilter != null ? x.Otdelenie_guid == OtdelenieFilter.GID : x.Manufacturer.Contains(""))
+                       & (InventoryFilter != null ? x.Inventory.Inventory.Contains(InventoryFilter) : x.Inventory.Inventory.Contains(""))).Count() / 25d));
+                    MonitorTable = new ObservableCollection<Monitor_M>(tmp);
                 }
 
             }
@@ -608,6 +617,20 @@ namespace Equipment.VM
                     };
             }
 
+        }
+
+        RelayCommand showLogs;
+        public RelayCommand ShowLogs
+        {
+            get
+            {
+                return showLogs ??= new RelayCommand(o =>
+                {
+                    Show_log_V log_window = new Show_log_V();
+                    (log_window.DataContext as Show_log_VM).GetData(SelectedMonitor.GID.ToString());
+                    log_window.ShowDialog();
+                });
+            }
         }
         #endregion
     }

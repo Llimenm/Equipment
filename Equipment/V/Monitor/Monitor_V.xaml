@@ -100,7 +100,7 @@
             </DataGrid.Resources>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Изменения..." />
+                    <MenuItem Header="Историй изменений" Command="{Binding ShowLogs}" />
                     <MenuItem Header="Удалить" Command="{Binding DeleteMonitor}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
