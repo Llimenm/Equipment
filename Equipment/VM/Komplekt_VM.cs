@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Equipment.V.Komplekt;
-using Equipment_accounting.Data;
-using OKB3Admin;
-using System.Threading.Tasks;
-using Equipment.M.EquipmentContext.Models;
+﻿using Equipment.M;
 using Equipment.M.EquipmentContext;
-using System.Linq;
-using System.Collections.ObjectModel;
-using System.Windows;
-using Equipment.M;
-using OKB3Admin.M.InventorySystem;
-using Microsoft.EntityFrameworkCore;
-using Equipment.V.Monitor;
-using OKB3Admin.M.Structura;
-using OKB3Admin.M.Printers;
+using Equipment.M.EquipmentContext.Models;
 using Equipment.V;
+using Equipment_accounting.Data;
+using Microsoft.EntityFrameworkCore;
+using OKB3Admin;
+using OKB3Admin.M.InventorySystem;
+using OKB3Admin.M.Printers;
+using OKB3Admin.M.Structura;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 
 namespace Equipment.VM
 {

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OKB3Admin;
-using Equipment.V;
-using System.Windows.Controls;
+﻿using Equipment.V;
 using Equipment.V.Komplekt;
-using Equipment.V.Supplementary_tables;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 using Equipment.V.Monitor;
+using Equipment.V.Supplementary_tables;
+using OKB3Admin;
+using System.Windows.Controls;
 
 namespace Equipment.VM
 {

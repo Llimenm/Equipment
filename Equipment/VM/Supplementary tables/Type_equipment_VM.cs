@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Equipment.M.EquipmentContext;
+﻿using Equipment.M.EquipmentContext;
 using Equipment.M.EquipmentContext.Models;
 using Equipment_accounting.Data;
 using Microsoft.EntityFrameworkCore;
 using OKB3Admin;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
 namespace Equipment.VM
 {
     class Type_equipment_VM : BaseModelForVM

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Equipment.V"
         xmlns:VM="clr-namespace:Equipment.VM" x:Class="Equipment.V.Show_log_V"
         mc:Ignorable="d"
-        Title="Show_log_V" Height="600" Width="900"
+        Title="История изменений" Height="600" Width="900"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
         <VM:Show_log_VM/>
@@ -21,7 +21,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <TextBlock Background="#FF7BACD6" Foreground="White" Margin="5" Grid.ColumnSpan="2" Text="История" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
 
         <StackPanel Margin="5" Grid.Row="1" Grid.ColumnSpan="2">
@@ -35,10 +35,10 @@
             </Border>
             <Button Command="{Binding AcceptFilter}" BorderBrush="#FF7BACD6" BorderThickness="1,1,1,1" Margin="2" Foreground="White" Content="Найти" Background="#FF7BACD6" Cursor="Hand"/>
         </StackPanel>
-        
+
         <DataGrid Margin="5" AutoGenerateColumns="False" ItemsSource="{Binding LogTable}" SelectedItem="{Binding SelectedLog}" Grid.Row="2" Grid.Column="0" IsReadOnly="True" SelectionMode="Single" CanUserAddRows="False">
             <DataGrid.Columns>
-                
+
                 <DataGridTemplateColumn Header="Дата изменения" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -54,7 +54,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Header="Изменения" Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -79,7 +79,7 @@
                     <Run Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.LogType}"></Run>
             </TextBlock>
             <TextBlock FontSize="16" Text="Изменения:" Margin="3"/>
-            <TextBox FontSize="16" Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.Changes}" IsReadOnly="True" Margin="3" Height="190" TextWrapping="Wrap" AcceptsReturn="True"/>
+            <TextBox FontSize="16" Foreground="White" Background="#FF7BACD6" Text="{Binding SelectedLog.Changes}" IsReadOnly="True" Margin="3" Height="300" TextWrapping="Wrap" AcceptsReturn="True"/>
         </StackPanel>
     </Grid>
 </Window>
