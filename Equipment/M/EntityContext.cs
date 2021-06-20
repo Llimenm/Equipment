@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using OKB3Admin;
-using OKB3Admin.M;
-using OKB3Admin.M.Structura;
-using OKB3Admin.M.InventorySystem;
 using OKB3Admin.Connection;
+using System;
 
 namespace Equipment.M
 {

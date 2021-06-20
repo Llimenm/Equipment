@@ -90,7 +90,10 @@ namespace Equipment.VM
         #endregion
 
         #region Get запросы
-
+        /// <summary>
+        /// Метод получения данных
+        /// </summary>
+        /// <returns></returns>
         public async Task GetData()
         {
             NewMonitor = new Monitor_M()

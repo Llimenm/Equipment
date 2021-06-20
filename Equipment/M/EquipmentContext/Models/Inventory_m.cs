@@ -1,9 +1,7 @@
 ﻿using OKB3Admin;
 using OKB3Admin.M.Structura;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Equipment.M.EquipmentContext.Models
 {

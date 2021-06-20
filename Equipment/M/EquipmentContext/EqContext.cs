@@ -1,13 +1,8 @@
 ﻿using Equipment.M.EquipmentContext.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using OKB3Admin;
-using OKB3Admin.Connection;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Equipment.M.EquipmentContext 
+namespace Equipment.M.EquipmentContext
 {
     public class EqContext : DbContext
     {

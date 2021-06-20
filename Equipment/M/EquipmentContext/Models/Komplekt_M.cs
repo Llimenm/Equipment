@@ -1,12 +1,8 @@
 ﻿using OKB3Admin;
-using OKB3Admin.M;
-using OKB3Admin.M.Structura;
 using OKB3Admin.M.InventorySystem;
+using OKB3Admin.M.Structura;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
 
 namespace Equipment.M.EquipmentContext.Models
 {

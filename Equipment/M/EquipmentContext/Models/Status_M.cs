@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OKB3Admin;
+﻿using OKB3Admin;
 
 namespace Equipment.M.EquipmentContext.Models
 {
